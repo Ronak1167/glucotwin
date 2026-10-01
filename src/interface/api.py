@@ -1,5 +1,5 @@
 r"""
-GlucoTwin — Frontend Integration & Dashboard API (v4)
+GlucoTwin — Frontend Integration & Dashboard API (v6)
 src/interface/api.py
 
 Clean, type-safe API for Aishni's frontend dashboard.
@@ -221,9 +221,21 @@ class GlucoTwinAPI:
         ts_now = pd.Timestamp.now().isoformat()
         return self.engine.memory.get_recent_transitions(before_time=ts_now, n=n)
 
-    def export_demo_json(self, output_path: str | Path, state_dict: Dict[str, Any]) -> None:
-        """Export sample state to JSON for frontend UI mock/testing."""
+    def export_demo_json(
+        self,
+        output_path: Optional[str | Path],
+        state_dict: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
+        """Export sample state to JSON for frontend UI mock/testing.
+
+        When ``output_path`` is None the serialized dict is returned instead of
+        writing a file.  This is useful for in-memory tests and direct API calls.
+        """
+        if output_path is None:
+            # Return the JSON-safe dict without touching the filesystem.
+            return json.loads(json.dumps(state_dict, default=str))
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(state_dict, f, indent=2, default=str)
+        return None
