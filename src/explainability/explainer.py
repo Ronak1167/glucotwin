@@ -159,9 +159,9 @@ class TwinExplainer:
         # Current glucose context
         if glucose is not None and not np.isnan(glucose):
             if glucose < 70:
-                narrative_parts.append(f"Current glucose is critically low at {glucose:.0f} mg/dL (Level 1 hypoglycemia).")
+                narrative_parts.append(f"Current glucose is below threshold at {glucose:.0f} mg/dL.")
             elif glucose < 90:
-                narrative_parts.append(f"Current glucose is in the near-hypoglycemia warning zone at {glucose:.0f} mg/dL.")
+                narrative_parts.append(f"Current glucose is near threshold at {glucose:.0f} mg/dL.")
             else:
                 narrative_parts.append(f"Current glucose is {glucose:.0f} mg/dL.")
 

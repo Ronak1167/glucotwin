@@ -173,6 +173,15 @@ class TwinState:
     glucose_deviation_from_baseline: Optional[float] = None  # vs. time-of-day bin mean
     glucose_deviation_from_ewm: Optional[float] = None        # vs. EWM baseline (alpha=0.05)
 
+    @property
+    def recommended_action(self) -> Optional[str]:
+        """
+        Deprecated legacy alias for backward compatibility.
+        Returns None to avoid misleading recommendation-style outputs.
+        The explicit model_alert_context field is the non-prescriptive contract.
+        """
+        return None
+
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
         d["alert_level"] = self.alert_level.value if hasattr(self.alert_level, "value") else str(self.alert_level)

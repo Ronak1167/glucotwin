@@ -325,13 +325,21 @@ class GlucoTwinEngine:
                 calibrated_proba_60 = None
                 cal_status_60 = "RAW_FALLBACK"
 
-        # The 60-minute calibrated probability is the production alert decision value.
-        alert_probability = calibrated_proba_60 if calibrated_proba_60 is not None else proba_60
-        alert_threshold = self.alert_decision_threshold
+        # The 60-minute calibrated prediction drives alert decisions when production calibrator is loaded.
+        if calibrated_proba_60 is not None and cal_status_60 == "CALIBRATED":
+            alert_probability = calibrated_proba_60
+            alert_threshold = self.alert_decision_threshold
+            alert_basis = "CALIBRATED_60MIN_THRESHOLD"
+        else:
+            alert_probability = proba_60
+            alert_threshold = self.threshold
+            alert_basis = "RAW_THRESHOLD"
+
+        alert_flag_60 = bool(alert_probability >= alert_threshold)
 
         # Multi-horizon estimates (scaled from primary model)
         # NOTE: These are scaled approximations, not independently trained horizon models.
-        # They are NOT calibrated (unsupported derived horizons).
+        # They are explicitly marked as derived and uncalibrated.
         proba_30 = float(np.clip(
             proba_60 * 0.85 + (0.30 if (g_curr < 85 and v_curr < -0.8) else 0.0), 0.0, 1.0
         ))
@@ -348,16 +356,20 @@ class GlucoTwinEngine:
                 "calibrated_probability": None,
                 "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
                 "alert": bool(proba_30 >= self.threshold),
+                "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+                "is_derived": True,
+                "is_calibrated": False,
                 "note": "Scaled estimate from 60-min model (uncalibrated)",
             },
             "60min": {
                 "raw_model_probability": round(proba_60, 3),
                 "calibrated_probability": round(calibrated_proba_60, 4) if calibrated_proba_60 is not None else None,
                 "calibration_status": cal_status_60,
-                "alert": bool(alert_probability >= alert_threshold),
-                "alert_basis": (
-                    "CALIBRATED_60MIN_THRESHOLD" if calibrated_proba_60 is not None else "RAW_THRESHOLD"
-                ),
+                "alert": alert_flag_60,
+                "alert_basis": alert_basis,
+                "operating_threshold": round(alert_threshold, 4),
+                "is_derived": False,
+                "is_calibrated": bool(cal_status_60 == "CALIBRATED"),
                 "note": (
                     "Primary model prediction" +
                     (" (calibrated via isotonic regression)" if cal_status_60 == "CALIBRATED" else " (raw fallback)")
@@ -368,6 +380,9 @@ class GlucoTwinEngine:
                 "calibrated_probability": None,
                 "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
                 "alert": bool(proba_90 >= self.threshold),
+                "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+                "is_derived": True,
+                "is_calibrated": False,
                 "note": "Scaled estimate from 60-min model (uncalibrated)",
             },
             "120min": {
@@ -375,6 +390,9 @@ class GlucoTwinEngine:
                 "calibrated_probability": None,
                 "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
                 "alert": bool(proba_120 >= self.threshold),
+                "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+                "is_derived": True,
+                "is_calibrated": False,
                 "note": "Scaled estimate from 60-min model (uncalibrated)",
             },
         }
@@ -547,8 +565,7 @@ class GlucoTwinEngine:
             )
         elif alert == AlertLevel.WATCH:
             model_alert_context = (
-                f"WATCH: Mild downward drift detected. Model probability {alert_probability:.1%}. "
-                "Monitor CGM readings."
+                f"WATCH: Mild downward drift detected. Model probability {alert_probability:.1%}."
             )
         else:
             model_alert_context = (
@@ -671,6 +688,7 @@ class GlucoTwinEngine:
             "lopo_f2": 0.754,
             "lopo_n_patients": 24,
             "lopo_threshold_used": 0.25,
+            "operating_threshold": self.threshold,
             "production_alert_threshold": self.alert_decision_threshold,
             "production_alert_threshold_scale": ("calibrated" if self.alert_decision_uses_calibration else "raw"),
             "production_alert_exit_threshold": self.alert_decision_exit_threshold,
@@ -793,4 +811,13 @@ class GlucoTwinEngine:
         self._prev_shap = None
         if hasattr(self, "_alert_sm") and self._alert_sm is not None:
             self._alert_sm.reset()
+
+    @property
+    def operating_threshold(self) -> float:
+        """Public operating threshold field (kept backward compatible for callers/benchmarks)."""
+        return self.threshold
+
+    @operating_threshold.setter
+    def operating_threshold(self, value: float) -> None:
+        self.threshold = value
 
