@@ -1,0 +1,54 @@
+# GlucoTwin — Digital Twin Configuration
+
+twin:
+  # Schema version (increment when Twin state schema changes)
+  schema_version: "1.0.0"
+
+  # State update frequency
+  update_interval_minutes: 15  # Matches CGM sampling interval
+
+  # Minimum history required before Twin can make predictions
+  min_history_minutes: 60
+
+  # Similarity matching
+  similarity:
+    method: "dtw"  # Dynamic Time Warping (start simple with Euclidean if DTW is slow)
+    fallback_method: "euclidean"
+    # Window of glucose history to match against
+    episode_window_minutes: 120
+    # Number of historical episodes to return
+    top_k_episodes: 3
+    # Minimum episode duration to be a valid historical match candidate
+    min_episode_minutes: 90
+
+  # Explainability
+  explainability:
+    method: "shap"
+    fallback_method: "feature_importance"  # If SHAP is too slow
+    n_top_features: 5  # Number of top features to report
+
+  # What-If simulation
+  simulation:
+    # Supported modification variables
+    # (only variables the model was trained on)
+    supported_variables:
+      - "carb_intake_g"
+      - "activity_steps_30min"
+      - "current_glucose_mgdl"
+      - "glucose_velocity_15min"
+    # Simulation safety warnings
+    include_safety_disclaimer: true
+    disclaimer_text: >
+      This is a computational simulation for research purposes only.
+      The output represents model predictions under a hypothetical scenario.
+      This is NOT a medical recommendation. Consult a healthcare professional
+      before making any clinical decisions.
+
+  # Output format version for Aishni's frontend
+  api:
+    version: "1.0"
+    format: "json"
+    # Timestamps in ISO 8601 UTC
+    timestamp_format: "iso8601"
+    # Glucose units in output
+    glucose_unit: "mg/dL"

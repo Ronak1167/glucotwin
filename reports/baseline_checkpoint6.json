@@ -1,0 +1,80 @@
+{
+  "checkpoint": "6",
+  "saved_at": "2026-09-30T19:55:00+05:30",
+  "evaluation_methodology": "Temporal holdout — first 80% train, last 20% test (pooled across 25 patients)",
+  "dataset": {
+    "name": "HUPA-UCM",
+    "n_patients": 25,
+    "condition": "Type 1 Diabetes",
+    "cgm_interval_min": 5,
+    "total_samples": 309367,
+    "positive_samples": 35848,
+    "positive_rate_pct": 11.59,
+    "n_test_samples": 61874,
+    "n_positives_test": 6662
+  },
+  "prediction_task": {
+    "horizon_min": 60,
+    "threshold_mgdl": 70.0,
+    "definition": "ADA Level-1 hypoglycemia"
+  },
+  "models": {
+    "lightgbm": {
+      "roc_auc": 0.9501,
+      "pr_auc": 0.824,
+      "sensitivity": 0.8226,
+      "specificity": 0.9223,
+      "precision": 0.561,
+      "f2": 0.7524,
+      "brier_score": 0.0734,
+      "nocturnal_sensitivity": 0.8856,
+      "best_threshold": 0.58,
+      "train_time_s": 2.85,
+      "inference_ms_per_sample": 0.0014,
+      "false_alarm_rate_per_day": 19.96,
+      "note": "threshold selected on SAME test set — this is a methodological limitation"
+    },
+    "random_forest": {
+      "roc_auc": 0.9522,
+      "pr_auc": 0.8311,
+      "sensitivity": 0.8263,
+      "specificity": 0.9278,
+      "precision": 0.58,
+      "f2": 0.7616,
+      "brier_score": 0.0709,
+      "nocturnal_sensitivity": 0.8901,
+      "best_threshold": 0.57,
+      "train_time_s": 8.61,
+      "inference_ms_per_sample": 0.0024,
+      "false_alarm_rate_per_day": 18.56,
+      "note": "threshold selected on SAME test set — this is a methodological limitation"
+    }
+  },
+  "known_limitations": [
+    "Threshold selection used the test set — inflates metrics. Fixed in checkpoint 7.",
+    "Multi-horizon predictions (30min, 90min) are scaled from 60-min model, not independently trained",
+    "TTT validation conducted on only 6 of 25 patients — sample size limitation documented",
+    "LOPO evaluation not yet run — generalization unknown",
+    "Calibration not yet applied to live twin output",
+    "False-alarm rate (19-20 alarms/day) is high — clinical viability requires investigation"
+  ],
+  "ttt_estimate": {
+    "validation_patients": 6,
+    "total_matched_pairs": 268,
+    "mae_min": 10.1,
+    "median_ae_min": 4.6,
+    "bias_min": -9.0,
+    "bias_direction": "early (model estimate fires before actual crossing)",
+    "within_15min_pct": 82.5,
+    "within_30min_pct": 91.4,
+    "language_note": "The model-derived estimate tended to occur earlier than the observed threshold crossing in this evaluation. This is not validated on the full 25-patient cohort."
+  },
+  "architecture": {
+    "version": "4",
+    "twin_state_fields": ["twin_confidence", "historical_memory", "trajectory_collision", "model_alert_context", "state_transition", "explanation_delta"],
+    "modules": ["PatientMemory", "OODDetector", "ReplayEngine", "PlattCalibrator", "LeadTimeAnalyzer", "MetabolicSimulatorV2"],
+    "test_count": 17,
+    "all_tests_pass": true,
+    "warning_count": 0
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "checkpoint": "8",
+  "saved_at": "2026-09-30T21:05:00+05:30",
+  "test_gate": {
+    "test_count": 20,
+    "all_tests_pass": true,
+    "warning_count": 0,
+    "test_duration_seconds": 8.38
+  },
+  "dataset": {
+    "name": "HUPA-UCM",
+    "n_patients": 25,
+    "condition": "Type 1 Diabetes",
+    "cgm_interval_min": 5,
+    "total_samples": 309367,
+    "positive_samples": 35848,
+    "positive_rate_pct": 11.59,
+    "validation_samples": 61111,
+    "test_samples": 61112
+  },
+  "current_model_artifact": {
+    "path": "models/glucotwin_production_model.joblib",
+    "size_bytes": 8561929,
+    "algorithm": "LightGBMClassifier",
+    "task": "Hypoglycemia prediction within 60 minutes",
+    "threshold_mgdl": 70.0
+  },
+  "current_model_configuration": {
+    "n_estimators": 200,
+    "learning_rate": 0.05,
+    "max_depth": 6,
+    "class_weight": "balanced",
+    "objective": "binary",
+    "features_count": 36,
+    "prediction_horizon_min": 60,
+    "classification_target": "glucose_future_min_60 <= 70.0 mg/dL"
+  },
+  "threshold_methodology": {
+    "derivation_source": "Strictly validation split (61,111 samples)",
+    "selection_criterion": "Optimal F2 / clinical recall-precision tradeoff on validation data without touching test set",
+    "derived_threshold": 0.44,
+    "validation_metrics": {
+      "roc_auc": 0.9556,
+      "pr_auc": 0.8066,
+      "sensitivity": 0.8664,
+      "specificity": 0.8918,
+      "precision": 0.4755,
+      "f2": 0.7441,
+      "brier_score": 0.0675,
+      "false_alarm_rate_per_day": 27.99
+    },
+    "test_metrics_unseen": {
+      "roc_auc": 0.9510,
+      "pr_auc": 0.8300,
+      "sensitivity": 0.8667,
+      "specificity": 0.8892,
+      "precision": 0.4891,
+      "f2": 0.7508,
+      "brier_score": 0.0690,
+      "false_alarm_rate_per_day": 28.43,
+      "leakage_status": "Zero test-set tuning; true blind holdout evaluation"
+    }
+  },
+  "calibration_methodology": {
+    "status": "Evaluated on validation holdout, ready for production integration",
+    "brier_raw": 0.0690,
+    "brier_platt": 0.0427,
+    "brier_isotonic": 0.0390,
+    "recommended_method": "isotonic",
+    "production_runtime_application": "Pending Phase 9.2 safe integration (currently raw probabilities exposed via model_self_awareness)"
+  },
+  "ttt_methodology": {
+    "model": "Damped-velocity ODE g(t) = g0 + v0*(1 - exp(-k*t))/k (decay constant k=0.015/min)",
+    "validation_scope": "Full cohort (24/25 eligible patients)",
+    "total_matched_pairs": 11471,
+    "mae_min": 32.55,
+    "median_ae_min": 17.6,
+    "std_ae_min": 46.81,
+    "p25_ae_min": 6.1,
+    "p75_ae_min": 42.6,
+    "p90_ae_min": 77.7,
+    "within_15min_pct": 46.0,
+    "within_30min_pct": 65.1,
+    "historical_limitation_note": "Previous 6-patient preliminary subset (MAE 10.1 min, 268 pairs) fully replaced across all docstrings, state dataclass, and API schemas."
+  },
+  "lopo_methodology": {
+    "validation_type": "Leave-One-Patient-Out Cross-Validation (24 iterations)",
+    "split_policy": "Strict patient separation — zero subject overlap between train and test folds",
+    "decision_threshold": 0.25,
+    "roc_auc_mean": 0.970,
+    "roc_auc_std": 0.027,
+    "pr_auc_mean": 0.858,
+    "pr_auc_std": 0.099,
+    "sensitivity_mean": 0.958,
+    "specificity_mean": 0.821,
+    "f2_mean": 0.754,
+    "n_patients": 24
+  },
+  "twin_state_version": "5",
+  "api_schema": {
+    "contract_version": "v5",
+    "producer": "Ronak (ML / Digital Twin Intelligence Engine)",
+    "consumer": "Aishni (Dashboard / UI Frontend)",
+    "core_fields": [
+      "twin_state_version",
+      "patient_id",
+      "timestamp",
+      "current_glucose_mgdl",
+      "glucose_velocity_15min",
+      "glucose_trend",
+      "risk_score",
+      "alert_level",
+      "is_nocturnal",
+      "active_iob_u",
+      "active_cob_g",
+      "predictions_by_horizon",
+      "estimated_time_to_threshold_min",
+      "top_risk_factors",
+      "model_interpretation",
+      "clinical_narrative",
+      "model_alert_context",
+      "what_if_simulations",
+      "similar_historical_episodes",
+      "data_quality",
+      "twin_confidence",
+      "state_transition",
+      "explanation_delta",
+      "historical_memory",
+      "trajectory_collision",
+      "model_self_awareness"
+    ]
+  }
+}

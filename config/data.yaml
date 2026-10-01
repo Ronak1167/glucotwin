@@ -1,0 +1,62 @@
+# GlucoTwin — Data Configuration
+# Verified against HUPA-UCM Diabetes Dataset (Mendeley Data DOI: 10.17632/3hbcscwz44.1)
+
+dataset:
+  name: "HUPA-UCM Diabetes Dataset"
+  version: "1"
+  doi: "10.17632/3hbcscwz44.1"
+  source: "Mendeley Data"
+  license: "CC BY 4.0"
+  n_patients: 25  # 25 T1DM patients
+  min_observation_days: 14
+
+paths:
+  raw_data: "data/raw/hupa_ucm/"
+  processed_data: "data/processed/"
+  interim_data: "data/interim/"
+  audit_output: "docs/DATASET_REPORT.md"
+
+# CGM configuration (FreeStyle Libre 2)
+cgm:
+  nominal_interval_minutes: 5
+  unit: "mg/dL"
+  valid_range_mgdl: [20, 600]
+
+column_map:
+  timestamp: "time"
+  glucose: "glucose"
+  insulin_basal: "basal_rate"
+  insulin_bolus: "bolus_volume_delivered"
+  carbs: "carb_input"
+  calories: "calories"
+  heart_rate: "heart_rate"
+  steps: "steps"
+
+# Signal availability (all verified in HUPA-UCM preprocessed)
+signals:
+  cgm: true           # Continuous glucose monitoring (mg/dL, 5-min)
+  insulin_basal: true # Basal rate (U/hr)
+  insulin_bolus: true # Bolus volume delivered (U)
+  meals: true         # Carb input (g)
+  steps: true         # Step count
+  calories: true      # Calories burned
+  heart_rate: true    # Heart rate (Fitbit Ionic bpm)
+  sleep: true         # Sleep states available in raw Fitbit / inferred circadian
+  sleep_stages: true  # Deep/light/rem/wake available in raw Fitbit sleep files
+
+# Missing data handling
+missing_data:
+  max_nan_fraction_per_window: 0.3
+  cgm_max_interpolation_gap_minutes: 30
+  default_strategy: "linear"
+  cgm_strategy: "linear"
+
+# Resampling
+resampling:
+  target_interval_minutes: 5
+  method: "nearest"
+
+# Validation
+validation:
+  min_cgm_readings: 200
+  min_hypo_events: 1

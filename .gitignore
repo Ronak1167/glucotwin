@@ -1,0 +1,60 @@
+# GlucoTwin .gitignore
+
+# Data (never commit raw patient data)
+data/raw/
+data/processed/
+data/interim/
+*.csv
+*.parquet
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+
+# Model artifacts (large binaries)
+models/
+*.model
+*.pth
+*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.env
+.venv
+env/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Secrets / credentials
+*.key
+*.pem
+*.env
+secrets.yaml
+.kaggle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temp outputs — keep reports/docs
+outputs/tmp/

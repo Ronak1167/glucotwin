@@ -1,0 +1,3264 @@
+{
+  "audits": [
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0001P.csv",
+      "filename": "HUPA0001P.csv",
+      "n_rows": 4096,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 4096,
+          "mean": 181.4,
+          "std": 70.6,
+          "min": 40.0,
+          "max": 444.0,
+          "pct_below_70": 1.44,
+          "pct_below_54": 0.27
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 4096,
+          "first": "2018-06-13 18:40:00",
+          "last": "2018-06-27 23:55:00",
+          "sample": "2018-06-13T18:40:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 4096,
+          "n_nonzero": 3811,
+          "max": 0.09,
+          "mean_nonzero": 0.05
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 4096,
+          "n_nonzero": 76,
+          "max": 5.2,
+          "mean_nonzero": 2.07
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 4096,
+          "n_nonzero": 40,
+          "max": 4.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 4096,
+          "mean": 19.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 4096,
+          "mean": 80.8,
+          "min": 53.5,
+          "max": 167.3
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-06-13T18:40:00",
+          "glucose": 332.0,
+          "calories": 6.359500050544739,
+          "heart_rate": 82.32283464566929,
+          "steps": 34.0,
+          "basal_rate": 0.0916666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T18:45:00",
+          "glucose": 326.0,
+          "calories": 7.72799998521805,
+          "heart_rate": 83.74015748031496,
+          "steps": 0.0,
+          "basal_rate": 0.0916666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T18:50:00",
+          "glucose": 330.0,
+          "calories": 4.749500036239624,
+          "heart_rate": 80.5251798561151,
+          "steps": 0.0,
+          "basal_rate": 0.0916666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0002P.csv",
+      "filename": "HUPA0002P.csv",
+      "n_rows": 3181,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3181,
+          "mean": 113.5,
+          "std": 59.1,
+          "min": 40.0,
+          "max": 310.0,
+          "pct_below_70": 23.86,
+          "pct_below_54": 12.92
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3181,
+          "first": "2018-06-13 22:45:00",
+          "last": "2018-06-24 23:45:00",
+          "sample": "2018-06-13T22:45:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3181,
+          "n_nonzero": 3169,
+          "max": 0.14,
+          "mean_nonzero": 0.09
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3181,
+          "n_nonzero": 51,
+          "max": 10.0,
+          "mean_nonzero": 4.56
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3181,
+          "n_nonzero": 12,
+          "max": 103.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3181,
+          "mean": 39.2
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3181,
+          "mean": 66.7,
+          "min": 39.4,
+          "max": 118.1
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-06-13T22:45:00",
+          "glucose": 86.0,
+          "calories": 6.213840007781982,
+          "heart_rate": 65.39024390243902,
+          "steps": 0.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T22:50:00",
+          "glucose": 82.0,
+          "calories": 6.33568000793457,
+          "heart_rate": 64.26923076923077,
+          "steps": 0.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T22:55:00",
+          "glucose": 78.0,
+          "calories": 6.579360008239746,
+          "heart_rate": 68.16279069767442,
+          "steps": 0.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 8.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0003P.csv",
+      "filename": "HUPA0003P.csv",
+      "n_rows": 3770,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3770,
+          "mean": 143.3,
+          "std": 61.3,
+          "min": 44.0,
+          "max": 366.0,
+          "pct_below_70": 7.03,
+          "pct_below_54": 0.48
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3770,
+          "first": "2018-06-13 21:40:00",
+          "last": "2018-06-26 23:45:00",
+          "sample": "2018-06-13T21:40:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3770,
+          "n_nonzero": 3689,
+          "max": 0.12,
+          "mean_nonzero": 0.06
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3770,
+          "n_nonzero": 109,
+          "max": 9.1,
+          "mean_nonzero": 2.47
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3770,
+          "n_nonzero": 66,
+          "max": 13.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3770,
+          "mean": 27.4
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3770,
+          "mean": 78.1,
+          "min": 51.2,
+          "max": 148.9
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-06-13T21:40:00",
+          "glucose": 137.66666666666666,
+          "calories": 7.320879936218262,
+          "heart_rate": 70.6923076923077,
+          "steps": 8.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T21:45:00",
+          "glucose": 137.0,
+          "calories": 11.196640014648438,
+          "heart_rate": 90.33333333333331,
+          "steps": 17.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-06-13T21:50:00",
+          "glucose": 136.33333333333334,
+          "calories": 8.182159900665283,
+          "heart_rate": 84.6774193548387,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0004P.csv",
+      "filename": "HUPA0004P.csv",
+      "n_rows": 3184,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3184,
+          "mean": 180.4,
+          "std": 83.0,
+          "min": 40.0,
+          "max": 411.0,
+          "pct_below_70": 9.7,
+          "pct_below_54": 4.71
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3184,
+          "first": "2018-07-09 15:30:00",
+          "last": "2018-07-20 16:45:00",
+          "sample": "2018-07-09T15:30:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3184,
+          "n_nonzero": 3105,
+          "max": 0.11,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3184,
+          "n_nonzero": 45,
+          "max": 19.8,
+          "mean_nonzero": 10.56
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3184,
+          "n_nonzero": 20,
+          "max": 130.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3184,
+          "mean": 30.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3184,
+          "mean": 78.1,
+          "min": 59.9,
+          "max": 149.6
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-07-09T15:30:00",
+          "glucose": 161.0,
+          "calories": 30.62444019317627,
+          "heart_rate": 92.35099337748343,
+          "steps": 306.0,
+          "basal_rate": 0.0474999999999999,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T15:35:00",
+          "glucose": 166.66666666666666,
+          "calories": 25.98056995868683,
+          "heart_rate": 97.28289473684212,
+          "steps": 146.0,
+          "basal_rate": 0.0474999999999999,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T15:40:00",
+          "glucose": 172.33333333333334,
+          "calories": 9.413250088691711,
+          "heart_rate": 86.53787878787878,
+          "steps": 0.0,
+          "basal_rate": 0.0474999999999999,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0005P.csv",
+      "filename": "HUPA0005P.csv",
+      "n_rows": 3858,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3858,
+          "mean": 147.7,
+          "std": 49.8,
+          "min": 40.0,
+          "max": 379.0,
+          "pct_below_70": 2.95,
+          "pct_below_54": 0.49
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3858,
+          "first": "2018-07-09 14:20:00",
+          "last": "2018-07-22 23:45:00",
+          "sample": "2018-07-09T14:20:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3858,
+          "n_nonzero": 3822,
+          "max": 0.08,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3858,
+          "n_nonzero": 67,
+          "max": 4.2,
+          "mean_nonzero": 1.5
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3858,
+          "n_nonzero": 55,
+          "max": 4.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3858,
+          "mean": 13.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3858,
+          "mean": 84.5,
+          "min": 32.4,
+          "max": 124.2
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-07-09T14:20:00",
+          "glucose": 184.83870967741936,
+          "calories": 4.9456599950790405,
+          "heart_rate": 83.90697674418605,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T14:25:00",
+          "glucose": 188.06451612903223,
+          "calories": 5.286739945411682,
+          "heart_rate": 81.8581560283688,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T14:30:00",
+          "glucose": 191.29032258064515,
+          "calories": 4.6898499727249146,
+          "heart_rate": 79.83464566929133,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0006P.csv",
+      "filename": "HUPA0006P.csv",
+      "n_rows": 2290,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 2290,
+          "mean": 165.2,
+          "std": 84.7,
+          "min": 42.0,
+          "max": 438.0,
+          "pct_below_70": 8.65,
+          "pct_below_54": 1.53
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 2290,
+          "first": "2018-07-09 15:45:00",
+          "last": "2018-07-17 14:30:00",
+          "sample": "2018-07-09T15:45:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 2290,
+          "n_nonzero": 2248,
+          "max": 0.11,
+          "mean_nonzero": 0.08
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 2290,
+          "n_nonzero": 46,
+          "max": 10.8,
+          "mean_nonzero": 4.93
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 2290,
+          "n_nonzero": 37,
+          "max": 10.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 2290,
+          "mean": 34.0
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 2290,
+          "mean": 65.6,
+          "min": 41.4,
+          "max": 157.7
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-07-09T15:45:00",
+          "glucose": 109.0,
+          "calories": 11.239389896392822,
+          "heart_rate": 70.76923076923077,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T15:50:00",
+          "glucose": 107.66666666666669,
+          "calories": 8.110899925231934,
+          "heart_rate": 70.1896551724138,
+          "steps": 5.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-07-09T15:55:00",
+          "glucose": 106.33333333333331,
+          "calories": 6.488719940185547,
+          "heart_rate": 70.17094017094017,
+          "steps": 0.0,
+          "basal_rate": 0.075,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0007P.csv",
+      "filename": "HUPA0007P.csv",
+      "n_rows": 3857,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3857,
+          "mean": 173.2,
+          "std": 78.7,
+          "min": 40.0,
+          "max": 385.0,
+          "pct_below_70": 8.94,
+          "pct_below_54": 3.99
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3857,
+          "first": "2018-09-19 14:25:00",
+          "last": "2018-10-02 23:45:00",
+          "sample": "2018-09-19T14:25:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3857,
+          "n_nonzero": 3602,
+          "max": 0.11,
+          "mean_nonzero": 0.09
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3857,
+          "n_nonzero": 89,
+          "max": 13.3,
+          "mean_nonzero": 5.29
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3857,
+          "n_nonzero": 82,
+          "max": 8.5
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3857,
+          "mean": 46.0
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3857,
+          "mean": 70.2,
+          "min": 43.9,
+          "max": 149.4
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-09-19T14:25:00",
+          "glucose": 90.04166666666666,
+          "calories": 14.551949858665466,
+          "heart_rate": 70.52112676056338,
+          "steps": 77.0,
+          "basal_rate": 0.0666666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-09-19T14:30:00",
+          "glucose": 85.75,
+          "calories": 17.323749661445618,
+          "heart_rate": 78.50420168067227,
+          "steps": 62.0,
+          "basal_rate": 0.0666666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-09-19T14:35:00",
+          "glucose": 81.45833333333333,
+          "calories": 12.888869881629944,
+          "heart_rate": 73.0603448275862,
+          "steps": 16.0,
+          "basal_rate": 0.0666666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0009P.csv",
+      "filename": "HUPA0009P.csv",
+      "n_rows": 3812,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3812,
+          "mean": 193.7,
+          "std": 46.1,
+          "min": 100.0,
+          "max": 307.0,
+          "pct_below_70": 0.0,
+          "pct_below_54": 0.0
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3812,
+          "first": "2018-09-19 14:35:00",
+          "last": "2018-10-02 20:10:00",
+          "sample": "2018-09-19T14:35:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3812,
+          "n_nonzero": 3757,
+          "max": 0.11,
+          "mean_nonzero": 0.09
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3812,
+          "n_nonzero": 66,
+          "max": 5.8,
+          "mean_nonzero": 1.95
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3812,
+          "n_nonzero": 44,
+          "max": 2.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3812,
+          "mean": 47.4
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3812,
+          "mean": 84.6,
+          "min": 61.9,
+          "max": 128.2
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-09-19T14:35:00",
+          "glucose": 256.92753623188406,
+          "calories": 9.151999950408936,
+          "heart_rate": 90.14285714285714,
+          "steps": 69.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-09-19T14:40:00",
+          "glucose": 257.4347826086956,
+          "calories": 27.2729594707489,
+          "heart_rate": 116.78358208955224,
+          "steps": 194.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-09-19T14:45:00",
+          "glucose": 257.94202898550725,
+          "calories": 30.29312038421631,
+          "heart_rate": 113.46835443037976,
+          "steps": 574.0,
+          "basal_rate": 0.1083333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0010P.csv",
+      "filename": "HUPA0010P.csv",
+      "n_rows": 2976,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 2976,
+          "mean": 135.9,
+          "std": 57.6,
+          "min": 41.0,
+          "max": 416.0,
+          "pct_below_70": 8.33,
+          "pct_below_54": 0.81
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 2976,
+          "first": "2018-11-07 15:35:00",
+          "last": "2018-11-17 23:30:00",
+          "sample": "2018-11-07T15:35:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 2976,
+          "n_nonzero": 2877,
+          "max": 0.15,
+          "mean_nonzero": 0.06
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 2976,
+          "n_nonzero": 78,
+          "max": 4.0,
+          "mean_nonzero": 1.22
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 2976,
+          "n_nonzero": 42,
+          "max": 6.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 2976,
+          "mean": 44.6
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 2976,
+          "mean": 78.2,
+          "min": 53.5,
+          "max": 166.3
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-11-07T15:35:00",
+          "glucose": 140.125,
+          "calories": 16.02988976240158,
+          "heart_rate": 129.7016129032258,
+          "steps": 35.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-11-07T15:40:00",
+          "glucose": 138.6875,
+          "calories": 4.3126100897789,
+          "heart_rate": 79.24806201550388,
+          "steps": 0.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-11-07T15:45:00",
+          "glucose": 137.25,
+          "calories": 4.1498700976371765,
+          "heart_rate": 76.70967741935483,
+          "steps": 0.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0011P.csv",
+      "filename": "HUPA0011P.csv",
+      "n_rows": 3839,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "int64",
+        "bolus_volume_delivered": "int64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3839,
+          "mean": 159.1,
+          "std": 57.1,
+          "min": 53.0,
+          "max": 355.0,
+          "pct_below_70": 2.68,
+          "pct_below_54": 0.13
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3839,
+          "first": "2018-11-07 15:55:00",
+          "last": "2018-11-20 23:45:00",
+          "sample": "2018-11-07T15:55:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3839,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3839,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3839,
+          "n_nonzero": 55,
+          "max": 60.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3839,
+          "mean": 54.6
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3839,
+          "mean": 73.8,
+          "min": 49.0,
+          "max": 163.8
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-11-07T15:55:00",
+          "glucose": 75.0,
+          "calories": 11.557850182056429,
+          "heart_rate": 79.50434782608696,
+          "steps": 135.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-11-07T16:00:00",
+          "glucose": 76.0,
+          "calories": 22.284200191497803,
+          "heart_rate": 95.26548672566372,
+          "steps": 507.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-11-07T16:05:00",
+          "glucose": 83.66666666666667,
+          "calories": 12.555649757385254,
+          "heart_rate": 107.96638655462183,
+          "steps": 102.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0014P.csv",
+      "filename": "HUPA0014P.csv",
+      "n_rows": 3829,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "int64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3829,
+          "mean": 188.1,
+          "std": 72.5,
+          "min": 40.0,
+          "max": 443.5,
+          "pct_below_70": 4.05,
+          "pct_below_54": 1.41
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3829,
+          "first": "2018-11-07 16:45:00",
+          "last": "2018-11-20 23:45:00",
+          "sample": "2018-11-07T16:45:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3829,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3829,
+          "n_nonzero": 41,
+          "max": 11.0,
+          "mean_nonzero": 6.63
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3829,
+          "n_nonzero": 40,
+          "max": 6.5
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3829,
+          "mean": 35.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3829,
+          "mean": 82.7,
+          "min": 53.5,
+          "max": 168.6
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2018-11-07T16:45:00",
+          "glucose": 165.0,
+          "calories": 4.493499994277954,
+          "heart_rate": 71.21428571428571,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 10.0,
+          "carb_input": 5.0
+        },
+        {
+          "time": "2018-11-07T16:50:00",
+          "glucose": 164.66666666666666,
+          "calories": 4.493499994277954,
+          "heart_rate": 70.15652173913044,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2018-11-07T16:55:00",
+          "glucose": 164.33333333333334,
+          "calories": 4.493499994277954,
+          "heart_rate": 69.07751937984496,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0015P.csv",
+      "filename": "HUPA0015P.csv",
+      "n_rows": 3792,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "int64",
+        "bolus_volume_delivered": "int64",
+        "carb_input": "int64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3792,
+          "mean": 163.5,
+          "std": 68.0,
+          "min": 40.0,
+          "max": 370.0,
+          "pct_below_70": 4.17,
+          "pct_below_54": 1.03
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3792,
+          "first": "2019-03-27 16:15:00",
+          "last": "2019-04-09 20:10:00",
+          "sample": "2019-03-27T16:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3792,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3792,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3792,
+          "n_nonzero": 0,
+          "max": 0.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3792,
+          "mean": 47.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3792,
+          "mean": 68.5,
+          "min": 49.4,
+          "max": 174.7
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-03-27T16:15:00",
+          "glucose": 60.0,
+          "calories": 17.69812035560608,
+          "heart_rate": 109.16260162601624,
+          "steps": 15.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-03-27T16:20:00",
+          "glucose": 58.66666666666666,
+          "calories": 6.774400055408478,
+          "heart_rate": 89.53658536585365,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-03-27T16:25:00",
+          "glucose": 57.333333333333336,
+          "calories": 6.012280106544495,
+          "heart_rate": 56.8859649122807,
+          "steps": 32.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0016P.csv",
+      "filename": "HUPA0016P.csv",
+      "n_rows": 3835,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3835,
+          "mean": 150.2,
+          "std": 79.8,
+          "min": 40.0,
+          "max": 362.0,
+          "pct_below_70": 15.15,
+          "pct_below_54": 6.02
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3835,
+          "first": "2019-03-27 16:15:00",
+          "last": "2019-04-09 23:45:00",
+          "sample": "2019-03-27T16:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3835,
+          "n_nonzero": 3812,
+          "max": 0.11,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3835,
+          "n_nonzero": 91,
+          "max": 8.6,
+          "mean_nonzero": 3.03
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3835,
+          "n_nonzero": 83,
+          "max": 8.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3835,
+          "mean": 43.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3835,
+          "mean": 89.8,
+          "min": 57.8,
+          "max": 135.3
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-03-27T16:15:00",
+          "glucose": 55.0,
+          "calories": 5.866559863090516,
+          "heart_rate": 94.26515151515152,
+          "steps": 0.0,
+          "basal_rate": 0.0691666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-03-27T16:20:00",
+          "glucose": 55.333333333333336,
+          "calories": 5.866559863090515,
+          "heart_rate": 92.78787878787878,
+          "steps": 0.0,
+          "basal_rate": 0.0691666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-03-27T16:25:00",
+          "glucose": 55.66666666666666,
+          "calories": 5.773439884185791,
+          "heart_rate": 89.57246376811594,
+          "steps": 0.0,
+          "basal_rate": 0.0691666666666666,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0017P.csv",
+      "filename": "HUPA0017P.csv",
+      "n_rows": 3599,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3599,
+          "mean": 200.8,
+          "std": 69.4,
+          "min": 40.0,
+          "max": 401.0,
+          "pct_below_70": 2.39,
+          "pct_below_54": 0.61
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3599,
+          "first": "2019-03-28 12:00:00",
+          "last": "2019-04-09 23:50:00",
+          "sample": "2019-03-28T12:00:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3599,
+          "n_nonzero": 3599,
+          "max": 0.06,
+          "mean_nonzero": 0.06
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3599,
+          "n_nonzero": 25,
+          "max": 9.0,
+          "mean_nonzero": 2.92
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3599,
+          "n_nonzero": 35,
+          "max": 10.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3599,
+          "mean": 27.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3599,
+          "mean": 82.1,
+          "min": 49.2,
+          "max": 148.6
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-03-28T12:00:00",
+          "glucose": 81.0,
+          "calories": 7.157249808311462,
+          "heart_rate": 91.6639344262295,
+          "steps": 13.0,
+          "basal_rate": 0.059,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-03-28T12:05:00",
+          "glucose": 74.66666666666667,
+          "calories": 8.016119718551636,
+          "heart_rate": 82.90647482014388,
+          "steps": 19.0,
+          "basal_rate": 0.059,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-03-28T12:10:00",
+          "glucose": 68.33333333333333,
+          "calories": 5.153219759464264,
+          "heart_rate": 79.4,
+          "steps": 48.0,
+          "basal_rate": 0.059,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0018P.csv",
+      "filename": "HUPA0018P.csv",
+      "n_rows": 3895,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "int64",
+        "bolus_volume_delivered": "int64",
+        "carb_input": "int64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3895,
+          "mean": 143.7,
+          "std": 70.3,
+          "min": 40.0,
+          "max": 358.0,
+          "pct_below_70": 17.59,
+          "pct_below_54": 10.94
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3895,
+          "first": "2019-07-03 11:15:00",
+          "last": "2019-07-16 23:45:00",
+          "sample": "2019-07-03T11:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3895,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3895,
+          "n_nonzero": 0,
+          "max": 0.0,
+          "mean_nonzero": 0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3895,
+          "n_nonzero": 0,
+          "max": 0.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3895,
+          "mean": 34.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3895,
+          "mean": 78.2,
+          "min": 53.4,
+          "max": 140.2
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-07-03T11:15:00",
+          "glucose": 108.0,
+          "calories": 4.585409998893738,
+          "heart_rate": 64.45528455284553,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-07-03T11:20:00",
+          "glucose": 105.33333333333331,
+          "calories": 4.675319969654083,
+          "heart_rate": 65.05109489051095,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-07-03T11:25:00",
+          "glucose": 102.66666666666669,
+          "calories": 6.38360983133316,
+          "heart_rate": 66.856,
+          "steps": 0.0,
+          "basal_rate": 0,
+          "bolus_volume_delivered": 0,
+          "carb_input": 0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0019P.csv",
+      "filename": "HUPA0019P.csv",
+      "n_rows": 3711,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3711,
+          "mean": 162.9,
+          "std": 60.5,
+          "min": 51.0,
+          "max": 371.0,
+          "pct_below_70": 2.69,
+          "pct_below_54": 0.05
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3711,
+          "first": "2019-07-03 14:00:00",
+          "last": "2019-07-16 11:10:00",
+          "sample": "2019-07-03T14:00:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3711,
+          "n_nonzero": 3375,
+          "max": 0.14,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3711,
+          "n_nonzero": 50,
+          "max": 1.0,
+          "mean_nonzero": 1.0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3711,
+          "n_nonzero": 53,
+          "max": 1.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3711,
+          "mean": 45.7
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3711,
+          "mean": 71.9,
+          "min": 37.1,
+          "max": 163.2
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-07-03T14:00:00",
+          "glucose": 195.0,
+          "calories": 6.149059891700745,
+          "heart_rate": 60.172413793103445,
+          "steps": 0.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 1.0,
+          "carb_input": 1.0
+        },
+        {
+          "time": "2019-07-03T14:05:00",
+          "glucose": 193.66666666666663,
+          "calories": 9.74568009376526,
+          "heart_rate": 64.26470588235294,
+          "steps": 20.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-07-03T14:10:00",
+          "glucose": 192.33333333333331,
+          "calories": 12.762199878692629,
+          "heart_rate": 75.46428571428571,
+          "steps": 50.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0020P.csv",
+      "filename": "HUPA0020P.csv",
+      "n_rows": 2862,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "int64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 2862,
+          "mean": 194.3,
+          "std": 78.8,
+          "min": 40.0,
+          "max": 390.0,
+          "pct_below_70": 3.56,
+          "pct_below_54": 0.31
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 2862,
+          "first": "2019-07-03 20:15:00",
+          "last": "2019-07-13 18:40:00",
+          "sample": "2019-07-03T20:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 2862,
+          "n_nonzero": 2628,
+          "max": 0.15,
+          "mean_nonzero": 0.09
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 2862,
+          "n_nonzero": 7,
+          "max": 1.0,
+          "mean_nonzero": 1.0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 2862,
+          "n_nonzero": 0,
+          "max": 0.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 2862,
+          "mean": 36.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 2862,
+          "mean": 77.5,
+          "min": 50.0,
+          "max": 135.4
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-07-03T20:15:00",
+          "glucose": 268.0,
+          "calories": 13.264320015907288,
+          "heart_rate": 76.75675675675676,
+          "steps": 37.0,
+          "basal_rate": 0.076,
+          "bolus_volume_delivered": 1.0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-07-03T20:20:00",
+          "glucose": 262.6666666666667,
+          "calories": 13.58784008026123,
+          "heart_rate": 82.69747899159664,
+          "steps": 66.0,
+          "basal_rate": 0.076,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0
+        },
+        {
+          "time": "2019-07-03T20:25:00",
+          "glucose": 257.3333333333333,
+          "calories": 26.528639793396,
+          "heart_rate": 106.8198198198198,
+          "steps": 63.0,
+          "basal_rate": 0.076,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0021P.csv",
+      "filename": "HUPA0021P.csv",
+      "n_rows": 2343,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 2343,
+          "mean": 137.3,
+          "std": 46.0,
+          "min": 47.0,
+          "max": 279.0,
+          "pct_below_70": 4.74,
+          "pct_below_54": 0.3
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 2343,
+          "first": "2019-07-03 12:25:00",
+          "last": "2019-07-11 15:35:00",
+          "sample": "2019-07-03T12:25:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 2343,
+          "n_nonzero": 2224,
+          "max": 0.04,
+          "mean_nonzero": 0.02
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 2343,
+          "n_nonzero": 23,
+          "max": 1.0,
+          "mean_nonzero": 1.0
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 2343,
+          "n_nonzero": 23,
+          "max": 1.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 2343,
+          "mean": 38.2
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 2343,
+          "mean": 75.1,
+          "min": 54.7,
+          "max": 178.8
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2019-07-03T12:25:00",
+          "glucose": 61.333333333333336,
+          "calories": 6.89656001329422,
+          "heart_rate": 85.0,
+          "steps": 14.0,
+          "basal_rate": 0.021,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-07-03T12:30:00",
+          "glucose": 60.0,
+          "calories": 6.583080053329468,
+          "heart_rate": 75.89285714285714,
+          "steps": 21.0,
+          "basal_rate": 0.021,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2019-07-03T12:35:00",
+          "glucose": 59.66666666666666,
+          "calories": 5.485900104045868,
+          "heart_rate": 73.62962962962963,
+          "steps": 14.0,
+          "basal_rate": 0.021,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0022P.csv",
+      "filename": "HUPA0022P.csv",
+      "n_rows": 4023,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 4023,
+          "mean": 112.6,
+          "std": 40.4,
+          "min": 40.0,
+          "max": 298.0,
+          "pct_below_70": 15.39,
+          "pct_below_54": 5.92
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 4023,
+          "first": "2020-01-17 00:35:00",
+          "last": "2020-01-30 23:45:00",
+          "sample": "2020-01-17T00:35:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 4023,
+          "n_nonzero": 4023,
+          "max": 0.25,
+          "mean_nonzero": 0.14
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 4023,
+          "n_nonzero": 103,
+          "max": 12.3,
+          "mean_nonzero": 3.8
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 4023,
+          "n_nonzero": 68,
+          "max": 120.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 4023,
+          "mean": 20.1
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 4023,
+          "mean": 62.7,
+          "min": 45.6,
+          "max": 150.2
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-01-17T00:35:00",
+          "glucose": 179.0,
+          "calories": 8.458800077438354,
+          "heart_rate": 69.12903225806451,
+          "steps": 12.0,
+          "basal_rate": 0.1333333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-17T00:40:00",
+          "glucose": 178.05194805194805,
+          "calories": 11.686500191688538,
+          "heart_rate": 78.25806451612904,
+          "steps": 27.0,
+          "basal_rate": 0.1333333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-17T00:45:00",
+          "glucose": 177.1038961038961,
+          "calories": 11.35260021686554,
+          "heart_rate": 72.75,
+          "steps": 45.0,
+          "basal_rate": 0.1333333333333333,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0023P.csv",
+      "filename": "HUPA0023P.csv",
+      "n_rows": 3919,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 3919,
+          "mean": 133.1,
+          "std": 43.2,
+          "min": 40.0,
+          "max": 302.0,
+          "pct_below_70": 4.31,
+          "pct_below_54": 0.92
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 3919,
+          "first": "2020-01-17 00:00:00",
+          "last": "2020-01-30 14:30:00",
+          "sample": "2020-01-17T00:00:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 3919,
+          "n_nonzero": 3574,
+          "max": 0.07,
+          "mean_nonzero": 0.04
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 3919,
+          "n_nonzero": 40,
+          "max": 5.0,
+          "mean_nonzero": 3.8
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 3919,
+          "n_nonzero": 63,
+          "max": 10.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 3919,
+          "mean": 15.3
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 3919,
+          "mean": 68.0,
+          "min": 46.9,
+          "max": 131.3
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-01-17T00:00:00",
+          "glucose": 40.0,
+          "calories": 15.04289996623993,
+          "heart_rate": 96.37190082644628,
+          "steps": 8.0,
+          "basal_rate": 0.035,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 1.0
+        },
+        {
+          "time": "2020-01-17T00:05:00",
+          "glucose": 41.333333333333336,
+          "calories": 8.316399931907654,
+          "heart_rate": 91.3953488372093,
+          "steps": 0.0,
+          "basal_rate": 0.035,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-17T00:10:00",
+          "glucose": 42.66666666666666,
+          "calories": 7.582599997520447,
+          "heart_rate": 85.99193548387096,
+          "steps": 0.0,
+          "basal_rate": 0.035,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0024P.csv",
+      "filename": "HUPA0024P.csv",
+      "n_rows": 2902,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 2902,
+          "mean": 166.9,
+          "std": 66.5,
+          "min": 42.0,
+          "max": 359.0,
+          "pct_below_70": 7.79,
+          "pct_below_54": 2.17
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 2902,
+          "first": "2020-01-20 11:30:00",
+          "last": "2020-01-30 13:15:00",
+          "sample": "2020-01-20T11:30:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 2902,
+          "n_nonzero": 1738,
+          "max": 0.14,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 2902,
+          "n_nonzero": 21,
+          "max": 6.0,
+          "mean_nonzero": 3.38
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 2902,
+          "n_nonzero": 14,
+          "max": 9.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 2902,
+          "mean": 56.3
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 2902,
+          "mean": 73.8,
+          "min": 47.2,
+          "max": 117.6
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-01-20T11:30:00",
+          "glucose": 87.0,
+          "calories": 8.187010049819946,
+          "heart_rate": 67.36363636363636,
+          "steps": 20.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-20T11:35:00",
+          "glucose": 86.0,
+          "calories": 17.988360166549683,
+          "heart_rate": 75.25,
+          "steps": 107.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-20T11:40:00",
+          "glucose": 85.0,
+          "calories": 17.411810278892517,
+          "heart_rate": 76.77777777777777,
+          "steps": 123.0,
+          "basal_rate": 0.069,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0025P.csv",
+      "filename": "HUPA0025P.csv",
+      "n_rows": 4006,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 4006,
+          "mean": 113.8,
+          "std": 40.1,
+          "min": 40.0,
+          "max": 245.0,
+          "pct_below_70": 13.38,
+          "pct_below_54": 4.92
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 4006,
+          "first": "2020-01-16 13:45:00",
+          "last": "2020-01-30 11:30:00",
+          "sample": "2020-01-16T13:45:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 4006,
+          "n_nonzero": 3852,
+          "max": 0.18,
+          "mean_nonzero": 0.1
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 4006,
+          "n_nonzero": 130,
+          "max": 6.5,
+          "mean_nonzero": 2.77
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 4006,
+          "n_nonzero": 20,
+          "max": 5.5
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 4006,
+          "mean": 27.8
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 4006,
+          "mean": 79.1,
+          "min": 54.6,
+          "max": 195.6
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-01-16T13:45:00",
+          "glucose": 108.0,
+          "calories": 17.583200454711914,
+          "heart_rate": 80.82857142857142,
+          "steps": 54.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-16T13:50:00",
+          "glucose": 103.66666666666669,
+          "calories": 11.344000101089478,
+          "heart_rate": 74.72972972972973,
+          "steps": 22.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-01-16T13:55:00",
+          "glucose": 99.33333333333331,
+          "calories": 13.187400102615356,
+          "heart_rate": 76.44444444444444,
+          "steps": 14.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0026P.csv",
+      "filename": "HUPA0026P.csv",
+      "n_rows": 40605,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 40605,
+          "mean": 163.0,
+          "std": 68.7,
+          "min": 40.0,
+          "max": 422.0,
+          "pct_below_70": 7.71,
+          "pct_below_54": 3.09
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 40605,
+          "first": "2020-05-23 00:15:00",
+          "last": "2020-10-10 23:55:00",
+          "sample": "2020-05-23T00:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 40605,
+          "n_nonzero": 26820,
+          "max": 0.11,
+          "mean_nonzero": 0.05
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 40605,
+          "n_nonzero": 334,
+          "max": 15.0,
+          "mean_nonzero": 8.96
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 40605,
+          "n_nonzero": 46,
+          "max": 8.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 40605,
+          "mean": 47.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 40605,
+          "mean": 80.3,
+          "min": 54.5,
+          "max": 156.9
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-05-23T00:15:00",
+          "glucose": 145.0,
+          "calories": 4.996710121631622,
+          "heart_rate": 85.53333333333333,
+          "steps": 0.0,
+          "basal_rate": 0.056,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-05-23T00:20:00",
+          "glucose": 144.66666666666666,
+          "calories": 5.25078010559082,
+          "heart_rate": 86.2258064516129,
+          "steps": 0.0,
+          "basal_rate": 0.056,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-05-23T00:25:00",
+          "glucose": 144.33333333333334,
+          "calories": 12.02597999572754,
+          "heart_rate": 97.55555555555556,
+          "steps": 112.0,
+          "basal_rate": 0.056,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0027P.csv",
+      "filename": "HUPA0027P.csv",
+      "n_rows": 165306,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 165306,
+          "mean": 130.8,
+          "std": 46.3,
+          "min": 40.0,
+          "max": 397.0,
+          "pct_below_70": 6.36,
+          "pct_below_54": 0.64
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 165306,
+          "first": "2020-06-26 22:15:00",
+          "last": "2022-01-21 21:40:00",
+          "sample": "2020-06-26T22:15:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 165306,
+          "n_nonzero": 97854,
+          "max": 0.15,
+          "mean_nonzero": 0.07
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 165306,
+          "n_nonzero": 1876,
+          "max": 18.0,
+          "mean_nonzero": 6.84
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 165306,
+          "n_nonzero": 1531,
+          "max": 10.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 165306,
+          "mean": 26.5
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 165306,
+          "mean": 76.8,
+          "min": 46.4,
+          "max": 178.4
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2020-06-26T22:15:00",
+          "glucose": 112.0,
+          "calories": 22.65535926818848,
+          "heart_rate": 81.0,
+          "steps": 261.0,
+          "basal_rate": 0.066,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-06-26T22:20:00",
+          "glucose": 105.0,
+          "calories": 21.16159963607788,
+          "heart_rate": 84.625,
+          "steps": 200.0,
+          "basal_rate": 0.066,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2020-06-26T22:25:00",
+          "glucose": 98.0,
+          "calories": 25.642879724502563,
+          "heart_rate": 89.22222222222223,
+          "steps": 292.0,
+          "basal_rate": 0.066,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    },
+    {
+      "filepath": "data\\raw\\hupa_ucm\\HUPA-UCM Diabetes Dataset\\Preprocessed\\HUPA0028P.csv",
+      "filename": "HUPA0028P.csv",
+      "n_rows": 25902,
+      "n_columns": 8,
+      "columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "dtypes": {
+        "time": "str",
+        "glucose": "float64",
+        "calories": "float64",
+        "heart_rate": "float64",
+        "steps": "float64",
+        "basal_rate": "float64",
+        "bolus_volume_delivered": "float64",
+        "carb_input": "float64"
+      },
+      "signals_found": {
+        "glucose": {
+          "column": "glucose",
+          "n_valid": 25902,
+          "mean": 128.4,
+          "std": 35.5,
+          "min": 40.0,
+          "max": 296.0,
+          "pct_below_70": 3.08,
+          "pct_below_54": 0.63
+        },
+        "timestamp": {
+          "column": "time",
+          "n_valid": 25902,
+          "first": "2022-02-17 13:50:00",
+          "last": "2022-05-18 12:15:00",
+          "sample": "2022-02-17T13:50:00",
+          "median_interval_min": 5.0
+        },
+        "insulin_basal": {
+          "column": "basal_rate",
+          "n_valid": 25902,
+          "n_nonzero": 10362,
+          "max": 0.09,
+          "mean_nonzero": 0.04
+        },
+        "insulin_bolus": {
+          "column": "bolus_volume_delivered",
+          "n_valid": 25902,
+          "n_nonzero": 223,
+          "max": 8.0,
+          "mean_nonzero": 3.49
+        },
+        "carbs": {
+          "column": "carb_input",
+          "n_valid": 25902,
+          "n_nonzero": 217,
+          "max": 7.0
+        },
+        "steps": {
+          "column": "steps",
+          "n_valid": 25902,
+          "mean": 19.0
+        },
+        "heart_rate": {
+          "column": "heart_rate",
+          "n_valid": 25902,
+          "mean": 75.6,
+          "min": 51.9,
+          "max": 149.3
+        }
+      },
+      "missing_pct": {
+        "time": 0.0,
+        "glucose": 0.0,
+        "calories": 0.0,
+        "heart_rate": 0.0,
+        "steps": 0.0,
+        "basal_rate": 0.0,
+        "bolus_volume_delivered": 0.0,
+        "carb_input": 0.0
+      },
+      "sample_columns": [
+        "time",
+        "glucose",
+        "calories",
+        "heart_rate",
+        "steps",
+        "basal_rate",
+        "bolus_volume_delivered",
+        "carb_input"
+      ],
+      "sample_rows": [
+        {
+          "time": "2022-02-17T13:50:00",
+          "glucose": 78.33333333333333,
+          "calories": 13.580939829349518,
+          "heart_rate": 86.04032258064517,
+          "steps": 198.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2022-02-17T13:55:00",
+          "glucose": 77.66666666666667,
+          "calories": 28.421040296554565,
+          "heart_rate": 121.80851063829788,
+          "steps": 374.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        },
+        {
+          "time": "2022-02-17T14:00:00",
+          "glucose": 77.0,
+          "calories": 15.919379949569702,
+          "heart_rate": 101.68939393939394,
+          "steps": 96.0,
+          "basal_rate": 0.0,
+          "bolus_volume_delivered": 0.0,
+          "carb_input": 0.0
+        }
+      ]
+    }
+  ],
+  "all_columns": [
+    "basal_rate",
+    "bolus_volume_delivered",
+    "calories",
+    "carb_input",
+    "glucose",
+    "heart_rate",
+    "steps",
+    "time"
+  ]
+}

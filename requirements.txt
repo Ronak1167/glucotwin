@@ -1,0 +1,33 @@
+# GlucoTwin — Pinned dependency manifest
+# CRP Digital Twin Challenge 2026 — Happiest Health
+# Python >= 3.10 required
+#
+# Install: pip install -r requirements.txt
+
+# ── Core data science ─────────────────────────────────────────────────────────
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+scipy>=1.10.0
+
+# ── ML models ────────────────────────────────────────────────────────────────
+lightgbm>=4.0.0
+xgboost>=2.0.0
+
+# ── Explainability ────────────────────────────────────────────────────────────
+shap>=0.44.0
+
+# ── Persistence ──────────────────────────────────────────────────────────────
+joblib>=1.3.0
+
+# ── Configuration ─────────────────────────────────────────────────────────────
+PyYAML>=6.0
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-anyio>=0.0.0
+
+# ── Notebook support (optional, for exploratory analysis) ─────────────────────
+# jupyter>=1.0.0
+# matplotlib>=3.7.0
+# seaborn>=0.12.0

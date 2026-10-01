@@ -1,0 +1,122 @@
+# GlucoTwin — Model Configuration
+
+# Random seed for reproducibility
+random_seed: 42
+
+# Prediction task
+task:
+  type: "binary_classification"
+  name: "hypoglycemia_prediction"
+
+# Hypoglycemia definition (ADA/clinical standard)
+# Level 1 hypoglycemia: < 70 mg/dL (3.9 mmol/L)
+# Level 2 hypoglycemia: < 54 mg/dL (3.0 mmol/L)
+# Using Level 1 as primary threshold (more events, clinically actionable)
+hypoglycemia:
+  primary_threshold_mgdl: 70    # ADA Level 1
+  severe_threshold_mgdl: 54     # ADA Level 2
+  # Minimum duration in minutes to count as an event (avoid noise)
+  min_event_duration_minutes: 15
+  # Events within this gap are merged (one continuous episode)
+  event_merge_gap_minutes: 30
+
+# Prediction horizons to evaluate (minutes)
+# Final horizon selected based on:
+# - CGM resolution (15 min)
+# - Event frequency
+# - Clinical usefulness
+# - Evaluation feasibility
+prediction_horizons_to_evaluate: [30, 60, 90, 120]
+
+# Selected horizon (set after audit + pilot experiments)
+# PLACEHOLDER — updated after dataset analysis
+selected_prediction_horizon_minutes: 60
+
+# Lookback window for features
+lookback:
+  cgm_minutes: 120          # 2 hours of CGM history
+  activity_minutes: 60      # 1 hour of activity
+  insulin_minutes: 240      # 4 hours of insulin history (IOB)
+  meal_minutes: 180         # 3 hours of meal history (CoB)
+  sleep_context_minutes: 480  # Up to 8 hours sleep window
+
+# Personal baseline
+baseline:
+  # Window of historical data to compute personal baseline
+  baseline_days: 14
+  # Minimum days required to compute a valid baseline
+  min_baseline_days: 7
+  # Time-of-day bins for circadian pattern capture
+  n_time_bins: 8  # 3-hour bins
+
+# Class imbalance strategy
+class_imbalance:
+  # Evaluate actual distribution before applying any strategy
+  # Options: "class_weight", "oversample_train", "none"
+  strategy: "class_weight"
+  # Never apply resampling to validation or test data
+  resampling_only_on_train: true
+
+# Models to train
+models:
+  logistic_regression:
+    enabled: true
+    C: 1.0
+    max_iter: 1000
+    class_weight: "balanced"
+    solver: "lbfgs"
+
+  random_forest:
+    enabled: true
+    n_estimators: 200
+    max_depth: 10
+    min_samples_leaf: 5
+    class_weight: "balanced"
+    n_jobs: -1
+
+  xgboost:
+    enabled: true
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: null  # Set automatically based on class ratio
+    eval_metric: "aucpr"
+
+  lightgbm:
+    enabled: true
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.05
+    is_unbalance: true
+
+  # LSTM: only enabled if dataset size justifies it
+  lstm:
+    enabled: false  # Evaluated after baseline models
+    hidden_size: 64
+    n_layers: 2
+    dropout: 0.2
+    epochs: 50
+    batch_size: 32
+
+# Model selection criteria
+selection:
+  primary_metric: "auroc"
+  secondary_metric: "auprc"
+  prefer_simpler_if_similar: true
+  similarity_threshold: 0.02  # Within 2% AUROC = treat as similar
+
+# Trajectory forecasting
+trajectory:
+  # Regression model for glucose forecasting
+  method: "gradient_boosting"  # Options: "gradient_boosting", "linear", "lstm"
+  forecast_steps: [1, 2, 3, 4]  # Steps at 15-min intervals = 15, 30, 45, 60 min
+  evaluation_metrics: ["mae", "rmse"]
+
+# Threshold tuning
+threshold:
+  # Default decision threshold (0.5 is standard; tune on validation)
+  default: 0.5
+  # Tune to optimize F1 or sensitivity on validation set
+  tune_metric: "f1"

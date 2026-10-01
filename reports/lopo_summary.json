@@ -1,0 +1,61 @@
+{
+  "threshold_derived_from_validation": 0.44,
+  "validation_metrics": {
+    "n_samples": 61111.0,
+    "n_positive": 6214.0,
+    "positive_prevalence": 0.1017,
+    "threshold_used": 0.44,
+    "roc_auc": 0.9556,
+    "pr_auc": 0.8066,
+    "sensitivity": 0.8664,
+    "recall": 0.8664,
+    "specificity": 0.8918,
+    "precision": 0.4755,
+    "f1": 0.614,
+    "f2": 0.7441,
+    "brier_score": 0.0675,
+    "false_alarm_rate_per_day": 27.9937,
+    "tp": 5384.0,
+    "fp": 5940.0,
+    "tn": 48957.0,
+    "fn": 830.0
+  },
+  "test_metrics_at_val_threshold": {
+    "n_samples": 61112.0,
+    "n_positive": 6662.0,
+    "positive_prevalence": 0.109,
+    "threshold_used": 0.44,
+    "roc_auc": 0.951,
+    "pr_auc": 0.83,
+    "sensitivity": 0.8667,
+    "recall": 0.8667,
+    "specificity": 0.8892,
+    "precision": 0.4891,
+    "f1": 0.6253,
+    "f2": 0.7508,
+    "brier_score": 0.069,
+    "false_alarm_rate_per_day": 28.4268,
+    "tp": 5774.0,
+    "fp": 6032.0,
+    "tn": 48418.0,
+    "fn": 888.0
+  },
+  "calibration": {
+    "brier_raw": 0.069,
+    "brier_platt": 0.0427,
+    "brier_isotonic": 0.039,
+    "recommended": "isotonic"
+  },
+  "lopo_summary": {
+    "roc_auc_mean": 0.97,
+    "roc_auc_std": 0.027,
+    "sensitivity_mean": 0.958,
+    "specificity_mean": 0.821,
+    "pr_auc_mean": 0.858,
+    "pr_auc_std": 0.099,
+    "f2_mean": 0.754,
+    "n_patients": 24,
+    "threshold": 0.25,
+    "note": "Fixed threshold on LOPO test \u2014 no test-set tuning"
+  }
+}

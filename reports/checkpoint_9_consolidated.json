@@ -1,0 +1,72 @@
+{
+  "checkpoint": "9.3-9.13-consolidated",
+  "timestamp": "2026-10-01T12:48:48.538891Z",
+  "tests_total": 25,
+  "tests_pass": 25,
+  "tests_fail": 0,
+  "warnings": 0,
+  "runtime_s": 6.36,
+  "twin_state_version": "6",
+  "changes": {
+    "Phase_9.3_alert_burden_investigation": {
+      "finding": "Alert burst caused by threshold oscillation at 5-min CGM granularity",
+      "solution": "AlertStateMachine with hysteresis (exit_threshold=0.30, cooldown=15min)",
+      "file": "src/twin/alert.py"
+    },
+    "Phase_9.5_personalized_baseline": {
+      "features_added": [
+        "personal_expanding_std",
+        "personal_ewm_baseline",
+        "glucose_deviation_from_ewm",
+        "personal_mean_velocity",
+        "velocity_deviation_from_personal",
+        "personal_nocturnal_mean",
+        "glucose_nocturnal_deviation"
+      ],
+      "leakage_safe": true,
+      "method": "shift(1) expanding + ewm(alpha=0.05) + nocturnal expanding mean ffill"
+    },
+    "Phase_9.6_circadian_features": {
+      "features_added": [
+        "personal_nocturnal_mean",
+        "glucose_nocturnal_deviation"
+      ],
+      "nocturnal_window": "23:00-06:00",
+      "leakage_safe": true
+    },
+    "Phase_9.8_alert_state_machine": {
+      "entry_threshold": 0.44,
+      "exit_threshold": 0.3,
+      "cooldown_minutes": 15,
+      "persistence_intervals": 1,
+      "hysteresis_ratio": 0.68,
+      "integrated_into": "GlucoTwinEngine.evaluate_state()",
+      "exposed_in": "model_self_awareness[alert_state_machine]"
+    },
+    "Phase_9.10_twin_state_v6": {
+      "new_fields": [
+        "glucose_acceleration_30min",
+        "glucose_deviation_from_baseline",
+        "glucose_deviation_from_ewm"
+      ],
+      "self_awareness_v6_additions": [
+        "test_roc_auc",
+        "test_sensitivity",
+        "test_specificity",
+        "test_f2",
+        "test_brier_raw",
+        "test_brier_calibrated",
+        "personalization block",
+        "alert_state_machine block",
+        "alert_episode_summary block"
+      ]
+    },
+    "Test_25_added": "AlertStateMachine hysteresis, cooldown, episode suppression"
+  },
+  "previous_checkpoint": {
+    "checkpoint": "9.2",
+    "tests": 24,
+    "pass": 24,
+    "twin_state_version": "5"
+  }
+}

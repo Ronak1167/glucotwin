@@ -1,0 +1,286 @@
+{
+  "patient_id": "HUA0001",
+  "timestamp": "2018-06-26 05:55:00",
+  "current_glucose_mgdl": 80.0,
+  "glucose_velocity_15min": 0.8,
+  "risk_score": 17.5,
+  "alert_level": "NORMAL",
+  "is_nocturnal": true,
+  "active_iob_u": 0.0,
+  "active_cob_g": 0.0,
+  "predictions_by_horizon": {
+    "30min": {
+      "probability": 0.213,
+      "alert": false
+    },
+    "60min": {
+      "probability": 0.251,
+      "alert": true
+    },
+    "90min": {
+      "probability": 0.238,
+      "alert": false
+    }
+  },
+  "top_risk_factors": [
+    {
+      "feature": "glucose_velocity_15min",
+      "shap_value": -0.08743913995717192,
+      "value": 0.8,
+      "direction": "reduces_hypo_risk"
+    },
+    {
+      "feature": "glucose_velocity_30min",
+      "shap_value": -0.06103099266188764,
+      "value": 0.4,
+      "direction": "reduces_hypo_risk"
+    },
+    {
+      "feature": "is_near_hypo",
+      "shap_value": 0.049517046994864485,
+      "value": 1.0,
+      "direction": "increases_hypo_risk"
+    },
+    {
+      "feature": "personal_expanding_mean",
+      "shap_value": -0.034522359782892566,
+      "value": 177.98426622110833,
+      "direction": "reduces_hypo_risk"
+    },
+    {
+      "feature": "is_low",
+      "shap_value": -0.032487655119449566,
+      "value": 0.0,
+      "direction": "reduces_hypo_risk"
+    }
+  ],
+  "clinical_narrative": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal period (sleep phase) reduces patient symptom awareness and counter-regulatory response. Primary risk drivers identified by twin: is near hypo.",
+  "recommended_action": "NORMAL: Metabolic trajectory stable. Glucose expected to remain in target range.",
+  "what_if_simulations": [
+    {
+      "scenario": "15g fast-acting carbs (Rescue)",
+      "hypo_prevented": false,
+      "simulated_nadir_mgdl": 80.0,
+      "trajectory": [
+        {
+          "minute": 0,
+          "glucose_baseline": 80.0,
+          "glucose_simulated": 80.0,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 5,
+          "glucose_baseline": 87.7,
+          "glucose_simulated": 90.7,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 10,
+          "glucose_baseline": 91.2,
+          "glucose_simulated": 101.0,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 15,
+          "glucose_baseline": 94.3,
+          "glucose_simulated": 112.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 20,
+          "glucose_baseline": 97.3,
+          "glucose_simulated": 124.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 25,
+          "glucose_baseline": 100.1,
+          "glucose_simulated": 135.6,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 30,
+          "glucose_baseline": 102.6,
+          "glucose_simulated": 144.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 35,
+          "glucose_baseline": 105.0,
+          "glucose_simulated": 152.2,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 40,
+          "glucose_baseline": 107.2,
+          "glucose_simulated": 158.0,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 45,
+          "glucose_baseline": 109.2,
+          "glucose_simulated": 162.3,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 50,
+          "glucose_baseline": 111.1,
+          "glucose_simulated": 165.6,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 55,
+          "glucose_baseline": 112.9,
+          "glucose_simulated": 168.2,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 60,
+          "glucose_baseline": 114.5,
+          "glucose_simulated": 170.3,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        }
+      ]
+    },
+    {
+      "scenario": "25g bedtime complex snack (Protein + Carb)",
+      "hypo_prevented": false,
+      "simulated_nadir_mgdl": 80.0,
+      "trajectory": [
+        {
+          "minute": 0,
+          "glucose_baseline": 80.0,
+          "glucose_simulated": 80.0,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 5,
+          "glucose_baseline": 87.7,
+          "glucose_simulated": 90.2,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 10,
+          "glucose_baseline": 91.2,
+          "glucose_simulated": 98.1,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 15,
+          "glucose_baseline": 94.3,
+          "glucose_simulated": 106.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 20,
+          "glucose_baseline": 97.3,
+          "glucose_simulated": 115.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 25,
+          "glucose_baseline": 100.1,
+          "glucose_simulated": 124.8,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 30,
+          "glucose_baseline": 102.6,
+          "glucose_simulated": 133.7,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 35,
+          "glucose_baseline": 105.0,
+          "glucose_simulated": 142.3,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 40,
+          "glucose_baseline": 107.2,
+          "glucose_simulated": 150.5,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 45,
+          "glucose_baseline": 109.2,
+          "glucose_simulated": 158.2,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 50,
+          "glucose_baseline": 111.1,
+          "glucose_simulated": 165.4,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 55,
+          "glucose_baseline": 112.9,
+          "glucose_simulated": 172.1,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        },
+        {
+          "minute": 60,
+          "glucose_baseline": 114.5,
+          "glucose_simulated": 178.2,
+          "is_hypo_baseline": false,
+          "is_hypo_simulated": false
+        }
+      ]
+    }
+  ],
+  "similar_historical_episodes": [
+    {
+      "episode_index": 2425,
+      "timestamp": "2018-06-22 04:45:00",
+      "similarity_score_pct": 86.5,
+      "historical_glucose": 89.0,
+      "subsequent_nadir_mgdl": 107.0,
+      "hypo_occurred": false,
+      "summary": "Historical episode from Jun 22, 04:45: Glucose started at 89 mg/dL, reached nadir of 107 mg/dL (stayed in safe range)."
+    },
+    {
+      "episode_index": 141,
+      "timestamp": "2018-06-14 06:25:00",
+      "similarity_score_pct": 85.3,
+      "historical_glucose": 80.0,
+      "subsequent_nadir_mgdl": 53.0,
+      "hypo_occurred": true,
+      "summary": "Historical episode from Jun 14, 06:25: Glucose started at 80 mg/dL, reached nadir of 53 mg/dL (developed hypoglycemia)."
+    },
+    {
+      "episode_index": 1294,
+      "timestamp": "2018-06-18 06:30:00",
+      "similarity_score_pct": 83.0,
+      "historical_glucose": 98.0,
+      "subsequent_nadir_mgdl": 107.0,
+      "hypo_occurred": false,
+      "summary": "Historical episode from Jun 18, 06:30: Glucose started at 98 mg/dL, reached nadir of 107 mg/dL (stayed in safe range)."
+    }
+  ]
+}
