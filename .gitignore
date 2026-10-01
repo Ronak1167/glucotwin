@@ -2,7 +2,8 @@
 
 # Data (never commit raw patient data)
 data/raw/
-data/processed/
+data/processed/*
+!data/processed/demo_twin_state.json
 data/interim/
 *.csv
 *.parquet
