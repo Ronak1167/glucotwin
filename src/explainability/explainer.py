@@ -176,9 +176,9 @@ class TwinExplainer:
         if bolus and bolus > 0.5:
             narrative_parts.append(f"Recent active bolus insulin of {bolus:.1f} Units represents significant ongoing downward pressure.")
 
-        # Nocturnal context
+        # Nocturnal context: describe the model feature without making a clinical claim.
         if is_nocturnal == 1:
-            narrative_parts.append("Nocturnal period (sleep phase) reduces patient symptom awareness and counter-regulatory response.")
+            narrative_parts.append("Nocturnal context is included as a model feature.")
 
         # Key drivers from SHAP
         driver_names = [f["feature"].replace("_", " ") for f in top_factors if f["shap_value"] > 0][:3]

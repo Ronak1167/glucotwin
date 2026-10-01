@@ -43,6 +43,11 @@ from src.simulation.simulator import MetabolicSimulator
 
 logger = logging.getLogger(__name__)
 
+# Validation-derived production alert thresholds. Raw and calibrated probabilities
+# are different scales, so the corresponding operating thresholds must not be mixed.
+CALIBRATED_ALERT_ENTRY_THRESHOLD = 0.13
+CALIBRATED_ALERT_EXIT_THRESHOLD = 0.08
+
 
 def _classify_trend(velocity_mgdl_per_min: float) -> str:
     """Map CGM rate-of-change velocity to named trend label."""
@@ -212,14 +217,23 @@ class GlucoTwinEngine:
         self._prev_features: Optional[Dict[str, float]] = None
         self._prev_shap: Optional[Dict[str, float]] = None
 
-        # Alert state machine (Phase 9.8)
-        # Thresholds are validation-derived (raw) or engineering-default (exit)
+        # Alert state machine uses the same probability scale as the production decision.
+        # Keep self.threshold unchanged for backward compatibility and benchmark callers.
+        if self.calibration_status == "CALIBRATED":
+            self.alert_decision_threshold = CALIBRATED_ALERT_ENTRY_THRESHOLD
+            self.alert_decision_exit_threshold = CALIBRATED_ALERT_EXIT_THRESHOLD
+            self.alert_decision_uses_calibration = True
+        else:
+            self.alert_decision_threshold = operating_threshold
+            self.alert_decision_exit_threshold = round(operating_threshold * 0.68, 3)
+            self.alert_decision_uses_calibration = False
+
         self._alert_sm = AlertStateMachine(
-            entry_threshold=operating_threshold,
-            exit_threshold=round(operating_threshold * 0.68, 3),
+            entry_threshold=self.alert_decision_threshold,
+            exit_threshold=self.alert_decision_exit_threshold,
             persistence_intervals=1,
             cooldown_minutes=15.0,
-            use_calibrated=False,
+            use_calibrated=self.alert_decision_uses_calibration,
         )
 
     def fit_ood_detector(self, X_train: pd.DataFrame) -> None:
@@ -311,6 +325,10 @@ class GlucoTwinEngine:
                 calibrated_proba_60 = None
                 cal_status_60 = "RAW_FALLBACK"
 
+        # The 60-minute calibrated probability is the production alert decision value.
+        alert_probability = calibrated_proba_60 if calibrated_proba_60 is not None else proba_60
+        alert_threshold = self.alert_decision_threshold
+
         # Multi-horizon estimates (scaled from primary model)
         # NOTE: These are scaled approximations, not independently trained horizon models.
         # They are NOT calibrated (unsupported derived horizons).
@@ -336,7 +354,10 @@ class GlucoTwinEngine:
                 "raw_model_probability": round(proba_60, 3),
                 "calibrated_probability": round(calibrated_proba_60, 4) if calibrated_proba_60 is not None else None,
                 "calibration_status": cal_status_60,
-                "alert": bool(proba_60 >= self.threshold),
+                "alert": bool(alert_probability >= alert_threshold),
+                "alert_basis": (
+                    "CALIBRATED_60MIN_THRESHOLD" if calibrated_proba_60 is not None else "RAW_THRESHOLD"
+                ),
                 "note": (
                     "Primary model prediction" +
                     (" (calibrated via isotonic regression)" if cal_status_60 == "CALIBRATED" else " (raw fallback)")
@@ -359,7 +380,8 @@ class GlucoTwinEngine:
         }
 
         # ── Risk Score ────────────────────────────────────────────────────────
-        risk_score = proba_60 * 70.0
+        # Risk score follows the same primary probability scale used for alerting.
+        risk_score = alert_probability * 70.0
         if g_curr < 70:
             risk_score = max(risk_score, 90.0)
         elif g_curr < 85 and v_curr < -0.5:
@@ -510,23 +532,27 @@ class GlucoTwinEngine:
         )
         if alert == AlertLevel.CRITICAL:
             model_alert_context = (
-                f"CRITICAL: Model predicted probability {proba_60:.1%} "
-                f"for threshold crossing within 60 min.{ttt_str} "
-                f"{'Nocturnal period reduces counter-regulatory awareness.' if is_nocturnal else ''}"
+                f"CRITICAL: Model predicted probability {alert_probability:.1%} "
+                f"for threshold crossing within 60 min."
+                f"{' (calibrated; raw model probability ' + format(proba_60, '.1%') + ')' if calibrated_proba_60 is not None else ''}"
+                f"{ttt_str} "
+                f"{'Nocturnal context is included as a model feature.' if is_nocturnal else ''}"
             )
         elif alert == AlertLevel.WARNING:
             model_alert_context = (
-                f"WARNING: Model predicted probability {proba_60:.1%} "
-                f"for threshold crossing within 60 min.{ttt_str}"
+                f"WARNING: Model predicted probability {alert_probability:.1%} "
+                f"for threshold crossing within 60 min."
+                f"{' (calibrated; raw model probability ' + format(proba_60, '.1%') + ')' if calibrated_proba_60 is not None else ''}"
+                f"{ttt_str}"
             )
         elif alert == AlertLevel.WATCH:
             model_alert_context = (
-                f"WATCH: Mild downward drift detected. Model probability {proba_60:.1%}. "
+                f"WATCH: Mild downward drift detected. Model probability {alert_probability:.1%}. "
                 "Monitor CGM readings."
             )
         else:
             model_alert_context = (
-                f"NORMAL: Model probability {proba_60:.1%}. "
+                f"NORMAL: Model probability {alert_probability:.1%}. "
                 "Metabolic trajectory appears stable."
             )
 
@@ -607,7 +633,7 @@ class GlucoTwinEngine:
 
         # ── Alert State Machine update (Phase 9.8) ──────────────────────────────
         alert_sm_output = self._alert_sm.update(
-            probability=proba_60,
+            probability=alert_probability,
             timestamp=timestamp_val,
             risk_score=risk_score,
         )
@@ -645,6 +671,9 @@ class GlucoTwinEngine:
             "lopo_f2": 0.754,
             "lopo_n_patients": 24,
             "lopo_threshold_used": 0.25,
+            "production_alert_threshold": self.alert_decision_threshold,
+            "production_alert_threshold_scale": ("calibrated" if self.alert_decision_uses_calibration else "raw"),
+            "production_alert_exit_threshold": self.alert_decision_exit_threshold,
             "lopo_evaluated": True,
             # Blind test (chronological holdout)
             "test_roc_auc": 0.951,

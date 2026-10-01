@@ -1,255 +1,453 @@
 {
-  "patient_id": "HUA0001",
+  "twin_state_version": "6",
+  "patient_id": "HUPA0001",
   "timestamp": "2018-06-26 05:55:00",
   "current_glucose_mgdl": 80.0,
   "glucose_velocity_15min": 0.8,
-  "risk_score": 17.5,
+  "glucose_acceleration_30min": 0.4,
+  "glucose_trend": "RISING_SLOW",
+  "risk_score": 4.5,
   "alert_level": "NORMAL",
   "is_nocturnal": true,
   "active_iob_u": 0.0,
   "active_cob_g": 0.0,
   "predictions_by_horizon": {
     "30min": {
-      "probability": 0.213,
-      "alert": false
+      "raw_model_probability": 0.213,
+      "calibrated_probability": null,
+      "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
+      "alert": false,
+      "note": "Scaled estimate from 60-min model (uncalibrated)"
     },
     "60min": {
-      "probability": 0.251,
-      "alert": true
+      "raw_model_probability": 0.251,
+      "calibrated_probability": 0.0649,
+      "calibration_status": "CALIBRATED",
+      "alert": false,
+      "alert_basis": "CALIBRATED_60MIN_THRESHOLD",
+      "note": "Primary model prediction (calibrated via isotonic regression)"
     },
     "90min": {
-      "probability": 0.238,
-      "alert": false
+      "raw_model_probability": 0.238,
+      "calibrated_probability": null,
+      "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
+      "alert": false,
+      "note": "Scaled estimate from 60-min model (uncalibrated)"
+    },
+    "120min": {
+      "raw_model_probability": 0.226,
+      "calibrated_probability": null,
+      "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
+      "alert": false,
+      "note": "Scaled estimate from 60-min model (uncalibrated)"
     }
   },
+  "estimated_time_to_threshold_min": null,
   "top_risk_factors": [
     {
       "feature": "glucose_velocity_15min",
+      "importance": 0.0874,
       "shap_value": -0.08743913995717192,
       "value": 0.8,
       "direction": "reduces_hypo_risk"
     },
     {
       "feature": "glucose_velocity_30min",
+      "importance": 0.061,
       "shap_value": -0.06103099266188764,
       "value": 0.4,
       "direction": "reduces_hypo_risk"
     },
     {
       "feature": "is_near_hypo",
+      "importance": 0.0495,
       "shap_value": 0.049517046994864485,
       "value": 1.0,
       "direction": "increases_hypo_risk"
     },
     {
       "feature": "personal_expanding_mean",
+      "importance": 0.0345,
       "shap_value": -0.034522359782892566,
       "value": 177.98426622110833,
       "direction": "reduces_hypo_risk"
     },
     {
       "feature": "is_low",
+      "importance": 0.0325,
       "shap_value": -0.032487655119449566,
       "value": 0.0,
       "direction": "reduces_hypo_risk"
     }
   ],
-  "clinical_narrative": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal period (sleep phase) reduces patient symptom awareness and counter-regulatory response. Primary risk drivers identified by twin: is near hypo.",
-  "recommended_action": "NORMAL: Metabolic trajectory stable. Glucose expected to remain in target range.",
+  "model_interpretation": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
+  "clinical_narrative": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
+  "model_alert_context": "NORMAL: Model probability 6.5%. Metabolic trajectory appears stable.",
   "what_if_simulations": [
     {
-      "scenario": "15g fast-acting carbs (Rescue)",
-      "hypo_prevented": false,
+      "scenario": "No intervention \u2014 baseline simulated trajectory",
+      "simulated_threshold_crossing_prevented": false,
+      "baseline": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null
+      },
+      "counterfactual": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null,
+        "delta_nadir_mgdl": 0.0
+      },
       "simulated_nadir_mgdl": 80.0,
       "trajectory": [
         {
           "minute": 0,
           "glucose_baseline": 80.0,
           "glucose_simulated": 80.0,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 5,
+          "glucose_baseline": 87.7,
+          "glucose_simulated": 87.7,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 10,
+          "glucose_baseline": 91.2,
+          "glucose_simulated": 91.2,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 15,
+          "glucose_baseline": 94.3,
+          "glucose_simulated": 94.3,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 20,
+          "glucose_baseline": 97.3,
+          "glucose_simulated": 97.3,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 25,
+          "glucose_baseline": 100.1,
+          "glucose_simulated": 100.1,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 30,
+          "glucose_baseline": 102.6,
+          "glucose_simulated": 102.6,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 35,
+          "glucose_baseline": 105.0,
+          "glucose_simulated": 105.0,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 40,
+          "glucose_baseline": 107.2,
+          "glucose_simulated": 107.2,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 45,
+          "glucose_baseline": 109.2,
+          "glucose_simulated": 109.2,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 50,
+          "glucose_baseline": 111.1,
+          "glucose_simulated": 111.1,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 55,
+          "glucose_baseline": 112.9,
+          "glucose_simulated": 112.9,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        },
+        {
+          "minute": 60,
+          "glucose_baseline": 114.5,
+          "glucose_simulated": 114.5,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
+        }
+      ]
+    },
+    {
+      "scenario": "15g fast-acting carbohydrate (computational scenario)",
+      "simulated_threshold_crossing_prevented": false,
+      "baseline": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null
+      },
+      "counterfactual": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null,
+        "delta_nadir_mgdl": 0.0
+      },
+      "simulated_nadir_mgdl": 80.0,
+      "trajectory": [
+        {
+          "minute": 0,
+          "glucose_baseline": 80.0,
+          "glucose_simulated": 80.0,
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 5,
           "glucose_baseline": 87.7,
           "glucose_simulated": 90.7,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 3.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 10,
           "glucose_baseline": 91.2,
           "glucose_simulated": 101.0,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 9.8,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 15,
           "glucose_baseline": 94.3,
           "glucose_simulated": 112.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 18.5,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 20,
           "glucose_baseline": 97.3,
           "glucose_simulated": 124.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 27.4,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 25,
           "glucose_baseline": 100.1,
           "glucose_simulated": 135.6,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 35.6,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 30,
           "glucose_baseline": 102.6,
           "glucose_simulated": 144.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 42.2,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 35,
           "glucose_baseline": 105.0,
           "glucose_simulated": 152.2,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 47.2,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 40,
           "glucose_baseline": 107.2,
           "glucose_simulated": 158.0,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 50.8,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 45,
           "glucose_baseline": 109.2,
           "glucose_simulated": 162.3,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 53.1,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 50,
           "glucose_baseline": 111.1,
           "glucose_simulated": 165.6,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 54.5,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 55,
           "glucose_baseline": 112.9,
           "glucose_simulated": 168.2,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 55.3,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 60,
           "glucose_baseline": 114.5,
           "glucose_simulated": 170.3,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 55.8,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         }
-      ]
+      ],
+      "scenario_note": "Simulator predicts threshold crossing may still occur under this scenario."
     },
     {
-      "scenario": "25g bedtime complex snack (Protein + Carb)",
-      "hypo_prevented": false,
+      "scenario": "25g complex carbohydrate snack (computational scenario)",
+      "simulated_threshold_crossing_prevented": false,
+      "baseline": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null
+      },
+      "counterfactual": {
+        "simulated_nadir_mgdl": 80.0,
+        "simulated_threshold_crossing": false,
+        "simulated_crossing_time_min": null,
+        "delta_nadir_mgdl": 0.0
+      },
       "simulated_nadir_mgdl": 80.0,
       "trajectory": [
         {
           "minute": 0,
           "glucose_baseline": 80.0,
           "glucose_simulated": 80.0,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 0.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 5,
           "glucose_baseline": 87.7,
           "glucose_simulated": 90.2,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 2.5,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 10,
           "glucose_baseline": 91.2,
           "glucose_simulated": 98.1,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 7.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 15,
           "glucose_baseline": 94.3,
           "glucose_simulated": 106.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 12.4,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 20,
           "glucose_baseline": 97.3,
           "glucose_simulated": 115.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 18.5,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 25,
           "glucose_baseline": 100.1,
           "glucose_simulated": 124.8,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 24.7,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 30,
           "glucose_baseline": 102.6,
           "glucose_simulated": 133.7,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 31.1,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 35,
           "glucose_baseline": 105.0,
           "glucose_simulated": 142.3,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 37.3,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 40,
           "glucose_baseline": 107.2,
           "glucose_simulated": 150.5,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 43.3,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 45,
           "glucose_baseline": 109.2,
           "glucose_simulated": 158.2,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 49.0,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 50,
           "glucose_baseline": 111.1,
           "glucose_simulated": 165.4,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 54.3,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 55,
           "glucose_baseline": 112.9,
           "glucose_simulated": 172.1,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 59.3,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         },
         {
           "minute": 60,
           "glucose_baseline": 114.5,
           "glucose_simulated": 178.2,
-          "is_hypo_baseline": false,
-          "is_hypo_simulated": false
+          "delta": 63.7,
+          "is_below_threshold_baseline": false,
+          "is_below_threshold_simulated": false
         }
       ]
     }
@@ -282,5 +480,121 @@
       "hypo_occurred": false,
       "summary": "Historical episode from Jun 18, 06:30: Glucose started at 98 mg/dL, reached nadir of 107 mg/dL (stayed in safe range)."
     }
-  ]
+  ],
+  "data_quality": {
+    "cgm_gap_minutes": 0.0,
+    "cgm_valid": true,
+    "insulin_available": true,
+    "meals_available": true,
+    "confidence_score": 1.0
+  },
+  "twin_confidence": {
+    "confidence_level": "HIGH",
+    "confidence_score": 0.974,
+    "out_of_distribution": false,
+    "reasons": [],
+    "components": {
+      "signal_completeness": 1.0,
+      "cgm_continuity": 1.0,
+      "feature_range_score": 0.936,
+      "mahalanobis_percentile": 100.0
+    }
+  },
+  "state_transition": null,
+  "explanation_delta": null,
+  "historical_memory": {
+    "n_past_episodes": 0,
+    "n_state_transitions": 0,
+    "recent_risk_timeline": [],
+    "memory_summary": {
+      "patient_id": "HUPA0001",
+      "n_state_snapshots": 1,
+      "n_transitions": 0,
+      "n_episodes": 0,
+      "n_explanation_deltas": 0
+    }
+  },
+  "trajectory_collision": {
+    "crossing_predicted": false
+  },
+  "model_self_awareness": {
+    "ttt_model": "damped_velocity_ODE",
+    "ttt_mae_min": 32.5,
+    "ttt_median_ae_min": 17.6,
+    "ttt_within_30min_pct": 65.1,
+    "ttt_validated_n": 11471,
+    "ttt_validated_patients": "24/25",
+    "ttt_preliminary_mae_note": "Preliminary estimate (6 patients, MAE=10.1 min) was unrepresentative. Full-cohort (24 patients, n=11471, MAE=32.5 min) supersedes it.",
+    "prediction_horizon_min": 60,
+    "horizon_30min_note": "Scaled estimate from 60-min model (not independently trained)",
+    "horizon_90min_note": "Scaled estimate from 60-min model (not independently trained)",
+    "horizon_120min_note": "Scaled estimate from 60-min model (not independently trained)",
+    "lopo_roc_auc": 0.97,
+    "lopo_roc_auc_std": 0.027,
+    "lopo_sensitivity": 0.958,
+    "lopo_specificity": 0.821,
+    "lopo_f2": 0.754,
+    "lopo_n_patients": 24,
+    "lopo_threshold_used": 0.25,
+    "production_alert_threshold": 0.13,
+    "production_alert_threshold_scale": "calibrated",
+    "production_alert_exit_threshold": 0.08,
+    "lopo_evaluated": true,
+    "test_roc_auc": 0.951,
+    "test_sensitivity": 0.867,
+    "test_specificity": 0.889,
+    "test_f2": 0.751,
+    "test_brier_raw": 0.069,
+    "test_brier_calibrated": 0.039,
+    "calibration_applied": true,
+    "calibration_status": "CALIBRATED",
+    "calibration_method": "isotonic",
+    "calibration_brier": 0.039,
+    "calibration_brier_raw": 0.069,
+    "calibration_brier_isotonic": 0.039,
+    "calibration_brier_platt": 0.0427,
+    "calibration_recommended": "isotonic",
+    "calibration_scope": "60-minute prediction horizon on HUPA-UCM validation cohort",
+    "calibration_note": "Isotonic calibration fit on validation split (Brier=0.0390 vs raw=0.0690 on test set). Live inference status: CALIBRATED.",
+    "personalization": {
+      "personal_baseline_available": true,
+      "ewm_baseline_available": true,
+      "glucose_deviation_from_personal_mean": -98.0,
+      "glucose_deviation_from_ewm": -17.6,
+      "glucose_nocturnal_deviation": -91.2,
+      "circadian_context": "time-of-day 3-hour bins + nocturnal heuristic (23:00-06:00)"
+    },
+    "alert_state_machine": {
+      "alert_state": "NORMAL",
+      "episode_active": false,
+      "in_cooldown": false,
+      "consecutive_above_threshold": 0,
+      "total_episodes_so_far": 0,
+      "current_episode": null,
+      "thresholds": {
+        "entry": 0.13,
+        "exit": 0.08,
+        "entry_basis": "validation-derived (F2-maximising on calibrated probability, Checkpoint 9.2)",
+        "exit_basis": "engineering default (0.62 \u00d7 entry; prevents oscillation near boundary)"
+      }
+    },
+    "alert_episode_summary": {
+      "n_completed_episodes": 0,
+      "n_active_episode": 0,
+      "total_observations": 1,
+      "observation_hours": 0.1,
+      "episodes_per_day_estimate": 0.0,
+      "mean_episode_duration_min": null,
+      "median_episode_duration_min": null,
+      "method_note": "Alert episodes are defined as continuous periods during which model-predicted probability exceeded the entry threshold. Hysteresis (exit_threshold) prevents re-alerting for brief dips below threshold. Cooldown (15 min) prevents consecutive episodes within one CGM interval."
+    },
+    "dataset": "HUPA-UCM",
+    "dataset_n_patients": 24,
+    "dataset_type": "retrospective CGM",
+    "twin_state_version": "6",
+    "scientific_note": "All metrics from HUPA-UCM only. No clinical validation performed. Generalization to other populations or devices is unknown."
+  },
+  "glucose_deviation_from_baseline": -98.0,
+  "glucose_deviation_from_ewm": -17.6,
+  "time_to_threshold_min": null
 }

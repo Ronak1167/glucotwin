@@ -95,8 +95,8 @@ GlucoTwin creates a continuously updating virtual representation (Digital Twin) 
                                      ▼
                        ┌────────────────────────────┐
                        │   Alert State Machine      │
-                       │  - Entry Threshold: 0.44   │
-                       │  - Exit Hysteresis: 0.30   │
+                       │  - Calibrated Entry: 0.13   │
+                       │  - Calibrated Exit: 0.08   │
                        │  - 15-min Cooldown Buffer  │
                        └─────────────┬──────────────┘
                                      │
@@ -119,6 +119,8 @@ GlucoTwin creates a continuously updating virtual representation (Digital Twin) 
 ```
 
 ---
+
+**Production alert thresholding:** the primary 60-minute model uses the calibrated threshold 0.13 with calibrated exit threshold 0.08 when the isotonic calibrator is loaded. The raw validation benchmark threshold 0.44 is retained only as a raw-model evaluation reference.
 
 ## 5. Dataset & Benchmark Cohort
 
@@ -197,7 +199,8 @@ Returns complete `TwinState` v6 JSON payload:
 - `current_glucose_mgdl`, `glucose_velocity_15min`, `glucose_acceleration_30min`, `glucose_trend`
 - `risk_score` (0–100), `alert_level` (`NORMAL`, `WATCH`, `WARNING`, `CRITICAL`)
 - `predictions_by_horizon`:
-  - `30min`, `60min`, `90min`, `120min` (raw probability, calibrated probability, alert flag)
+  - `30min`, `90min`, `120min`: derived uncalibrated estimates (not independently trained)
+- `60min`: primary prediction with isotonic calibration when the production calibrator is available; its alert flag uses the calibrated operating threshold
 - `estimated_time_to_threshold_min`: Float or `None`
 - `trajectory_collision`: Uncertainty tier (`LOW`, `MODERATE`), empirical MAE note
 - `top_risk_factors`: Top SHAP drivers with `feature`, `value`, `shap_value`, `direction`

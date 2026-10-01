@@ -240,7 +240,12 @@ def run_pipeline():
     df_demo = patient_dfs[demo_patient_id]
     X_demo = patient_features[demo_patient_id]
 
-    twin = GlucoTwinEngine(patient_id=demo_patient_id, classifier=best_model_obj, column_map=COLUMN_MAP)
+    twin = GlucoTwinEngine(
+        patient_id=demo_patient_id,
+        classifier=best_model_obj,
+        column_map=COLUMN_MAP,
+        calibrator_path=Path("models/glucotwin_calibrator.joblib"),
+    )
     split_demo = int(0.70 * len(df_demo))
     twin.set_historical_index(df_demo.iloc[:split_demo], X_demo.iloc[:split_demo])
 

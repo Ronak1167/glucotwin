@@ -182,6 +182,8 @@ class TwinState:
         d["time_to_threshold_min"] = self.estimated_time_to_threshold_min
         if not d["clinical_narrative"] and d["model_interpretation"]:
             d["clinical_narrative"] = d["model_interpretation"]
+        # Do not synthesize a clinical recommendation field from model text.
+        # The explicit model_alert_context field is the non-prescriptive contract.
 
         if self.data_quality is not None:
             if hasattr(self.data_quality, "to_dict"):

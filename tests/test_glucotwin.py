@@ -1013,6 +1013,14 @@ def test_engine_calibration_runtime_and_fallback():
         assert pred_60["calibration_status"] == "CALIBRATED"
         assert isinstance(pred_60["calibrated_probability"], float)
         assert 0.0 <= pred_60["calibrated_probability"] <= 1.0
+        assert engine_cal.alert_decision_uses_calibration is True
+        assert engine_cal.alert_decision_threshold == pytest.approx(0.13)
+        assert engine_cal.alert_decision_exit_threshold == pytest.approx(0.08)
+        assert pred_60["alert"] == (pred_60["calibrated_probability"] >= engine_cal.alert_decision_threshold)
+        assert pred_60["alert_basis"] == "CALIBRATED_60MIN_THRESHOLD"
+        assert "recommended_action" not in d
+        assert "counter-regulatory" not in d["model_interpretation"].lower()
+        assert "symptom awareness" not in d["model_interpretation"].lower()
 
         # Check multi-horizon safety: 30min and 90min must NOT claim calibration
         pred_30 = d["predictions_by_horizon"]["30min"]
