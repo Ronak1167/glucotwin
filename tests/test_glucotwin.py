@@ -33,6 +33,11 @@ QUALITY GATE REQUIREMENTS (all must pass):
   22. IsotonicCalibrator properties (bounds, monotonicity, determinism, input validation, serialization)
   23. Calibrator zero-test-leakage verification
   24. Engine calibration runtime integration, fallback mechanism, multi-horizon honesty
+  25. AlertStateMachine hysteresis, cooldown, episode suppression
+  26. TwinState serialization resilience across Enums, strings, and dict quality blocks
+  27. Unlabeled streaming inference safety and full row preservation
+  28. SHAP explainer feature name and value column alignment
+  29. Feature ablation group definitions and evaluation protocol
 """
 
 from __future__ import annotations
@@ -275,7 +280,8 @@ def test_end_to_end_twin_engine_and_api():
     assert payload["alert_level"] in [e.value for e in AlertLevel]
     assert payload["glucose_trend"] in [e.value for e in GlucoseTrend]
     assert isinstance(payload["predictions_by_horizon"], dict)
-    assert "60min" in payload["predictions_by_horizon"]
+    for h in ["30min", "60min", "90min", "120min"]:
+        assert h in payload["predictions_by_horizon"], f"Missing horizon {h}"
     assert isinstance(payload["what_if_simulations"], list)
     assert len(payload["what_if_simulations"]) >= 2
 
@@ -1017,6 +1023,10 @@ def test_engine_calibration_runtime_and_fallback():
         assert pred_90["calibrated_probability"] is None
         assert pred_90["calibration_status"] == "UNSUPPORTED_DERIVED_HORIZON"
 
+        pred_120 = d["predictions_by_horizon"]["120min"]
+        assert pred_120["calibrated_probability"] is None
+        assert pred_120["calibration_status"] == "UNSUPPORTED_DERIVED_HORIZON"
+
         # Check threshold preservation
         assert engine_cal.threshold == 0.25
 
@@ -1026,6 +1036,7 @@ def test_engine_calibration_runtime_and_fallback():
         assert msa["calibration_status"] == "CALIBRATED"
         assert msa["calibration_method"] == "isotonic"
         assert msa["calibration_brier"] == 0.039
+        assert "horizon_120min_note" in msa
 
         # JSON roundtrip
         json_str = json.dumps(d)
@@ -1143,3 +1154,174 @@ def test_alert_state_machine_hysteresis():
     ts_r = pd.Timestamp("2026-01-01 12:00:00")
     out_r = asm.update(0.05, ts_r)
     assert out_r["alert_state"] == "NORMAL"
+
+
+# --- Test 26: TwinState Serialization Resilience ---------------------------
+
+def test_twin_state_serialization_resilience():
+    """
+    TEST 26: TwinState.to_dict() must remain robust when alert_level,
+    glucose_trend, or data_quality are supplied as raw strings or dicts.
+    """
+    # 1. State with string alert_level and glucose_trend
+    state = TwinState(
+        twin_state_version="6",
+        patient_id="TEST_PID",
+        timestamp="2026-01-01T12:00:00",
+        current_glucose_mgdl=115.0,
+        glucose_velocity_15min=-0.8,
+        glucose_acceleration_30min=-0.2,
+        glucose_trend="FALLING",
+        alert_level="WARNING",  # string instead of AlertLevel enum
+        data_quality={"cgm_valid": True, "confidence_score": 0.95},  # dict instead of DataQuality
+    )
+
+    d = state.to_dict()
+    assert isinstance(d, dict)
+    assert d["alert_level"] == "WARNING"
+    assert d["glucose_trend"] == "FALLING"
+    assert d["data_quality"]["confidence_score"] == 0.95
+    assert d["twin_state_version"] == "6"
+
+    # JSON roundtrip must succeed
+    json_str = json.dumps(d)
+    assert len(json_str) > 0
+
+
+# --- Test 27: Unlabeled Streaming Inference Safety -------------------------
+
+def test_unlabeled_streaming_inference_safety():
+    """
+    TEST 27: Feature engineering and Twin Engine must safely handle
+    unlabeled streaming data (e.g. live inference where future label is not yet known),
+    without dropping the current row or raising errors.
+    """
+    files = get_patient_files(DATA_DIR)
+    df_raw = load_patient_raw(files[0]).iloc[:100].copy()
+    df_clean = preprocess_patient(df_raw, COLUMN_MAP)
+
+    # Ensure no label column exists
+    if "label_hypo" in df_clean.columns:
+        df_clean = df_clean.drop(columns=["label_hypo"])
+
+    # Vectorized path with label_col=None
+    X_vec, y_vec = build_feature_matrix(df_clean, COLUMN_MAP, label_col=None, vectorized=True)
+    assert len(X_vec) == len(df_clean), f"Expected {len(df_clean)} rows in X, got {len(X_vec)}"
+    assert y_vec.isna().all()
+
+    # Iterative path with label_col=None
+    X_iter, y_iter = build_feature_matrix(df_clean, COLUMN_MAP, label_col=None, vectorized=False)
+    assert len(X_iter) == len(df_clean), f"Expected {len(df_clean)} rows in X_iter, got {len(X_iter)}"
+
+    # GlucoTwinEngine.evaluate_state on unlabeled current_data
+    from src.models.classifier import HypoClassifier
+    clf = HypoClassifier(model_type="lightgbm", n_estimators=10)
+    # Train dummy model on minimal synthetic data
+    X_synth = pd.DataFrame({col: np.random.randn(20) for col in X_vec.columns})
+    y_synth = pd.Series([0, 1] * 10)
+    clf.fit(X_synth, y_synth)
+
+    engine = GlucoTwinEngine(
+        patient_id="STREAM_TEST",
+        classifier=clf,
+        column_map=COLUMN_MAP,
+        operating_threshold=0.25,
+        calibrator=None,
+    )
+    twin_state = engine.evaluate_state(df_clean, current_idx=-1)
+    assert isinstance(twin_state, TwinState)
+    assert twin_state.twin_state_version == "6"
+    assert twin_state.patient_id == "STREAM_TEST"
+
+    # Reset engine
+    engine.reset()
+    assert engine._prev_alert is None
+    assert engine._alert_sm._episode_active is False
+
+
+# --- Test 28: SHAP Explainer Feature Mapping & Alignment -------------------
+
+def test_shap_explainer_feature_mapping():
+    """
+    TEST 28: TwinExplainer must align feature names with their exact column values,
+    preventing positional index drift when columns differ from training ordering.
+    """
+    from src.explainability.explainer import TwinExplainer
+    from src.models.classifier import HypoClassifier
+
+    # Create dummy dataset with distinct column values
+    feat_names = ["glucose_current", "glucose_velocity_15min", "bolus_sum_240min"]
+    X = pd.DataFrame({
+        "glucose_current": [80.0, 90.0, 100.0, 70.0, 65.0],
+        "glucose_velocity_15min": [-1.5, -0.5, 0.0, -2.0, -1.0],
+        "bolus_sum_240min": [2.5, 1.0, 0.0, 3.0, 2.0],
+    })
+    y = pd.Series([1, 0, 0, 1, 1])
+
+    clf = HypoClassifier(model_type="lightgbm", n_estimators=10)
+    clf.fit(X, y)
+
+    explainer = TwinExplainer(clf)
+    sample_row = X.iloc[0]
+
+    # Explain single row
+    top_factors = explainer.explain(sample_row, top_k=3)
+    assert len(top_factors) > 0
+    for factor in top_factors:
+        assert "feature" in factor
+        assert "importance" in factor
+        assert "value" in factor
+        # Check value matches the exact series value for that feature name
+        expected_val = sample_row[factor["feature"]]
+        assert round(float(factor["value"]), 2) == round(float(expected_val), 2)
+
+
+# --- Test 29: Feature Ablation Group Definitions & Protocol ----------------
+
+def test_feature_ablation_definitions_and_protocol():
+    """
+    TEST 29: Feature ablation definitions must produce the 5 canonical subsets,
+    and run_feature_ablation_study must execute without data leakage.
+    """
+    from src.evaluation.ablation import get_ablation_subsets, run_feature_ablation_study
+
+    cols = [
+        "glucose_current", "glucose_mean_120min", "glucose_velocity_15min",
+        "bolus_sum_240min", "carbs_sum_180min", "steps_sum_60min",
+        "hour_of_day", "is_nocturnal_heuristic",
+        "personal_expanding_mean", "personal_ewm_baseline",
+    ]
+    subsets = get_ablation_subsets(cols)
+
+    expected_subsets = ["full_model", "no_personal_baseline", "no_circadian", "cgm_and_insulin", "cgm_only"]
+    for s in expected_subsets:
+        assert s in subsets, f"Expected subset '{s}' missing"
+        assert len(subsets[s]) > 0
+
+    assert "personal_expanding_mean" not in subsets["no_personal_baseline"]
+    assert "hour_of_day" not in subsets["no_circadian"]
+    assert "carbs_sum_180min" not in subsets["cgm_and_insulin"]
+    assert "bolus_sum_240min" not in subsets["cgm_only"]
+
+    # Test small run_feature_ablation_study execution
+    np.random.seed(42)
+    n_train, n_test = 60, 20
+    X_tr = pd.DataFrame(np.random.randn(n_train, len(cols)), columns=cols)
+    y_tr = pd.Series((X_tr["glucose_current"] < 0).astype(int))
+    X_te = pd.DataFrame(np.random.randn(n_test, len(cols)), columns=cols)
+    y_te = pd.Series((X_te["glucose_current"] < 0).astype(int))
+
+    study = run_feature_ablation_study(
+        X_train=X_tr,
+        y_train=y_tr,
+        X_test=X_te,
+        y_test=y_te,
+        threshold=0.5,
+        n_estimators=10,
+    )
+    assert "ablation_results" in study
+    assert "full_model" in study["ablation_results"]
+    assert "cgm_only" in study["ablation_results"]
+    assert "roc_auc" in study["ablation_results"]["full_model"]["metrics"]
+    assert "evaluation_protocol" in study
+

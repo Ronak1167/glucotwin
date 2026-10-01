@@ -175,8 +175,8 @@ class TwinState:
 
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
-        d["alert_level"] = self.alert_level.value
-        d["glucose_trend"] = self.glucose_trend
+        d["alert_level"] = self.alert_level.value if hasattr(self.alert_level, "value") else str(self.alert_level)
+        d["glucose_trend"] = self.glucose_trend.value if hasattr(self.glucose_trend, "value") else str(self.glucose_trend)
 
         # Keep backward-compatible field names
         d["time_to_threshold_min"] = self.estimated_time_to_threshold_min
@@ -184,5 +184,8 @@ class TwinState:
             d["clinical_narrative"] = d["model_interpretation"]
 
         if self.data_quality is not None:
-            d["data_quality"] = self.data_quality.to_dict()
+            if hasattr(self.data_quality, "to_dict"):
+                d["data_quality"] = self.data_quality.to_dict()
+            elif isinstance(self.data_quality, dict):
+                d["data_quality"] = self.data_quality
         return d

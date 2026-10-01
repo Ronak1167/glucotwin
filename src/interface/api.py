@@ -199,12 +199,10 @@ class GlucoTwinAPI:
         if self.engine is None:
             raise RuntimeError("Engine not initialized in API.")
         from src.features.engineer import build_feature_matrix
+        label_col = "label_hypo" if "label_hypo" in current_data.columns else None
         X_all, _ = build_feature_matrix(
             current_data, self.engine.column_map,
-            label_col=(
-                "label_hypo" if "label_hypo" in current_data.columns
-                else current_data.columns[-1]
-            ),
+            label_col=label_col,
             vectorized=True,
         )
         if len(X_all) == 0:

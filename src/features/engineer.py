@@ -468,16 +468,22 @@ def compute_personal_baseline_features(
         # Not enough history for baseline
         for key in [
             "glucose_deviation_from_baseline", "personal_mean_all_time",
-            "personal_std_all_time", "personal_ewm_baseline",
-            "glucose_deviation_from_ewm", "personal_nocturnal_mean",
+            "personal_std_all_time", "personal_expanding_mean",
+            "personal_expanding_std", "personal_ewm_baseline",
+            "glucose_deviation_from_ewm", "personal_mean_velocity",
+            "velocity_deviation_from_personal", "personal_nocturnal_mean",
             "glucose_nocturnal_deviation", "baseline_bin_mean",
         ]:
             features[key] = np.nan
         return features
 
     # ── Overall statistics ────────────────────────────────────────────────────
-    features["personal_mean_all_time"] = float(hist_glucose.mean())
-    features["personal_std_all_time"] = float(hist_glucose.std())
+    mean_val = float(hist_glucose.mean())
+    std_val = float(hist_glucose.std())
+    features["personal_mean_all_time"] = mean_val
+    features["personal_std_all_time"] = std_val
+    features["personal_expanding_mean"] = mean_val
+    features["personal_expanding_std"] = std_val
 
     # ── Get current glucose value (at or just before current_time) ───────────
     at_or_before = glucose[timestamps <= current_time].dropna()
@@ -528,9 +534,23 @@ def compute_personal_baseline_features(
             features["glucose_nocturnal_deviation"] = current_val - noc_mean
         else:
             features["glucose_nocturnal_deviation"] = np.nan
+    # ── Velocity baseline (personal mean drift) ──────────────────────────────
+    if len(hist_glucose) >= 4:
+        hist_v15 = (hist_glucose - hist_glucose.shift(3)) / 15.0
+        hist_v15_clean = hist_v15.dropna()
+        if len(hist_v15_clean) >= 10:
+            mean_vel = float(hist_v15_clean.mean())
+            features["personal_mean_velocity"] = mean_vel
+            curr_v15 = features.get("glucose_velocity_15min", np.nan)
+            features["velocity_deviation_from_personal"] = (
+                curr_v15 - mean_vel if not np.isnan(curr_v15) else np.nan
+            )
+        else:
+            features["personal_mean_velocity"] = np.nan
+            features["velocity_deviation_from_personal"] = np.nan
     else:
-        features["personal_nocturnal_mean"] = np.nan
-        features["glucose_nocturnal_deviation"] = np.nan
+        features["personal_mean_velocity"] = np.nan
+        features["velocity_deviation_from_personal"] = np.nan
 
     return features
 
@@ -641,7 +661,7 @@ def compute_all_features_for_row(
 def build_feature_matrix_vectorized(
     df: pd.DataFrame,
     column_map: Dict[str, Optional[str]],
-    label_col: str = "label_hypo",
+    label_col: Optional[str] = "label_hypo",
     lookback_cgm: float = DEFAULT_CGM_LOOKBACK_MIN,
     lookback_insulin: float = DEFAULT_INSULIN_LOOKBACK_MIN,
     lookback_meal: float = DEFAULT_MEAL_LOOKBACK_MIN,
@@ -652,8 +672,7 @@ def build_feature_matrix_vectorized(
     High-speed vectorized feature engineering for a single patient time series.
     Guarantees ZERO data leakage: all rolling features use closed='left' (strictly past data).
     """
-    if label_col not in df.columns:
-        raise ValueError(f"Label column '{label_col}' not found. Run label generation first.")
+    has_labels = (label_col is not None) and (label_col in df.columns)
     
     ts_col = "timestamp" if "timestamp" in df.columns else column_map.get("timestamp", "timestamp")
     glucose_col = "glucose_mgdl" if "glucose_mgdl" in df.columns else column_map.get("glucose_mgdl", "glucose")
@@ -661,9 +680,12 @@ def build_feature_matrix_vectorized(
     df_sorted = df.sort_values(ts_col).reset_index(drop=True)
     df_idx = df_sorted.set_index(ts_col).sort_index()
 
-    labeled_mask = df_sorted[label_col].notna()
-    if not labeled_mask.any():
-        return pd.DataFrame(), pd.Series(dtype=float)
+    if has_labels:
+        labeled_mask = df_sorted[label_col].notna()
+        if not labeled_mask.any():
+            return pd.DataFrame(), pd.Series(dtype=float)
+    else:
+        labeled_mask = pd.Series(True, index=df_sorted.index)
 
     X = pd.DataFrame(index=df_sorted.index)
     g = pd.to_numeric(df_idx[glucose_col], errors="coerce")
@@ -782,11 +804,17 @@ def build_feature_matrix_vectorized(
 
         # Nocturnal glucose baseline: rolling 7-day nocturnal mean (hour<6 or >=23)
         # Computed vectorized as expanding mean restricted to nocturnal hours, then forward-filled
+        hours = None
         if "hour_of_day" in df_sorted.columns:
-            is_noc = (
-                (df_sorted["hour_of_day"].values >= 23) |
-                (df_sorted["hour_of_day"].values < 6)
-            )
+            hours = df_sorted["hour_of_day"].values
+        elif ts_col in df_sorted.columns:
+            try:
+                hours = pd.to_datetime(df_sorted[ts_col]).dt.hour.values
+            except Exception:
+                hours = None
+
+        if hours is not None:
+            is_noc = (hours >= 23) | (hours < 6)
             g_noc = g.copy()
             g_noc[~is_noc] = np.nan  # mask non-nocturnal periods
             noc_exp_mean = g_noc.shift(1).expanding(min_periods=10).mean().ffill().values
@@ -802,9 +830,13 @@ def build_feature_matrix_vectorized(
             X["personal_nocturnal_mean"] = np.nan
             X["glucose_nocturnal_deviation"] = np.nan
 
-    # Retain only labeled rows
-    X_out = X.loc[labeled_mask].copy()
-    y_out = df_sorted.loc[labeled_mask, label_col].copy()
+    # Retain only labeled rows if labels are present; otherwise retain full X for inference
+    if has_labels:
+        X_out = X.loc[labeled_mask].copy()
+        y_out = df_sorted.loc[labeled_mask, label_col].copy()
+    else:
+        X_out = X.copy()
+        y_out = pd.Series(np.nan, index=df_sorted.index, name=label_col if label_col else "label")
 
     return X_out, y_out
 
@@ -812,7 +844,7 @@ def build_feature_matrix_vectorized(
 def build_feature_matrix(
     df: pd.DataFrame,
     column_map: Dict[str, Optional[str]],
-    label_col: str = "label_hypo",
+    label_col: Optional[str] = "label_hypo",
     lookback_cgm: float = DEFAULT_CGM_LOOKBACK_MIN,
     lookback_insulin: float = DEFAULT_INSULIN_LOOKBACK_MIN,
     lookback_meal: float = DEFAULT_MEAL_LOOKBACK_MIN,
@@ -836,18 +868,19 @@ def build_feature_matrix(
             include_personal_baseline=include_personal_baseline,
         )
     
-    if label_col not in df.columns:
-        raise ValueError(f"Label column '{label_col}' not found. Run label generation first.")
+    has_labels = (label_col is not None) and (label_col in df.columns)
     
     ts_col = "timestamp"
     if ts_col not in df.columns:
         raise ValueError("'timestamp' column required. Run preprocessing first.")
     
-    labeled_mask = df[label_col].notna()
-    labeled_df = df[labeled_mask].copy()
-    
-    if len(labeled_df) == 0:
-        return pd.DataFrame(), pd.Series(dtype=float)
+    if has_labels:
+        labeled_mask = df[label_col].notna()
+        labeled_df = df[labeled_mask].copy()
+        if len(labeled_df) == 0:
+            return pd.DataFrame(), pd.Series(dtype=float)
+    else:
+        labeled_df = df.copy()
     
     all_features = []
     timestamps = pd.to_datetime(df[ts_col])
@@ -874,5 +907,8 @@ def build_feature_matrix(
         all_features.append(row_features)
     
     X = pd.DataFrame(all_features, index=labeled_df.index)
-    y = labeled_df[label_col]
+    if has_labels:
+        y = labeled_df[label_col]
+    else:
+        y = pd.Series(np.nan, index=labeled_df.index, name=label_col if label_col else "label")
     return X, y

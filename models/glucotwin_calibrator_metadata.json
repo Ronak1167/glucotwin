@@ -1,0 +1,28 @@
+{
+  "calibrator_type": "isotonic",
+  "calibrator_class": "src.models.calibration.IsotonicCalibrator",
+  "version": "1.0.0",
+  "twin_state_version": "6",
+  "created_at": "2026-09-30T23:55:00+05:30",
+  "training_methodology": "Isotonic regression fit on validation split (20% chronological holdout)",
+  "source_model_identity": "LightGBMClassifier (n_estimators=250, max_depth=6, lr=0.05, balanced)",
+  "prediction_horizon_min": 60,
+  "target_threshold_mgdl": 70.0,
+  "n_train_samples": 183333,
+  "n_val_samples": 61111,
+  "n_test_samples": 61112,
+  "dataset_name": "HUPA-UCM",
+  "cohort_patients": 24,
+  "brier_score_test_calibrated": 0.039,
+  "brier_score_test_raw": 0.069,
+  "brier_score_val_calibrated": 0.0395,
+  "calibrated_threshold_f2_val": 0.13,
+  "raw_threshold_f2_val": 0.44,
+  "monotonic": true,
+  "out_of_bounds_policy": "clip",
+  "output_bounds": [
+    0.0,
+    1.0
+  ],
+  "leakage_guarantee": "Zero test labels or test predictions used during fitting. Fitted strictly on validation split."
+}

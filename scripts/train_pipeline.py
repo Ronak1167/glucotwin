@@ -207,7 +207,7 @@ def run_pipeline():
     report_path = Path("docs/MODEL_PERFORMANCE_REPORT.md")
     report_path.parent.mkdir(exist_ok=True)
     with open(report_path, "w", encoding="utf-8") as f:
-        f.write(f"# GlucoTwin — MODEL BENCHMARK & CLINICAL VALIDATION REPORT\n\n")
+        f.write(f"# GlucoTwin — MODEL BENCHMARK & RETROSPECTIVE PERFORMANCE EVALUATION REPORT\n\n")
         f.write(f"**Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}  \n")
         f.write(f"**Cohort Evaluated**: 12 T1DM Patients (HUPA-UCM Clinical Dataset)  \n")
         f.write(f"**Prediction Horizon**: {primary_horizon} Minutes  \n")

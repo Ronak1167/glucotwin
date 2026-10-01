@@ -110,9 +110,11 @@ class TwinExplainer:
 
         # Structure SHAP factors
         contributions = []
-        for name, shap_val, raw_val in zip(feature_names, vals, df_sample.iloc[0].values):
+        for name, shap_val in zip(feature_names, vals):
+            raw_val = df_sample[name].iloc[0] if name in df_sample.columns else np.nan
             contributions.append({
                 "feature": name,
+                "importance": round(abs(float(shap_val)), 4),
                 "shap_value": float(shap_val),
                 "value": float(raw_val) if pd.notna(raw_val) else None,
                 "direction": "increases_hypo_risk" if shap_val > 0 else "reduces_hypo_risk",
@@ -128,6 +130,15 @@ class TwinExplainer:
             "top_risk_factors": top_factors,
             "clinical_narrative": narrative,
         }
+
+    def explain(
+        self,
+        X_sample: pd.DataFrame | pd.Series,
+        top_k: int = 5,
+    ) -> List[Dict[str, Any]]:
+        """Convenience alias returning top_risk_factors directly."""
+        return self.explain_sample(X_sample, top_k=top_k)["top_risk_factors"]
+
 
     def _generate_clinical_narrative(
         self,

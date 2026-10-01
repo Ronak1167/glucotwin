@@ -9,10 +9,13 @@ data/interim/
 *.h5
 *.hdf5
 *.pkl
-*.joblib
-
-# Model artifacts (large binaries)
-models/
+# Model artifacts (keep production models, ignore scratch/large binaries)
+/models/*
+!/models/glucotwin_production_model.joblib
+!/models/glucotwin_calibrator.joblib
+!/models/glucotwin_calibrator_metadata.json
+!/models/.gitkeep
+!/models/*.joblib
 *.model
 *.pth
 *.pt
@@ -40,6 +43,9 @@ venv/
 .vscode/
 .idea/
 *.swp
+.claude/
+.gemini/
+.jolli/
 
 # Secrets / credentials
 *.key
@@ -58,3 +64,6 @@ logs/
 
 # Temp outputs — keep reports/docs
 outputs/tmp/
+.pytest_tmp/
+.pytest_cache/
+.agent-collab/

@@ -252,10 +252,10 @@ class GlucoTwinEngine:
                  self.column_map.get("timestamp", "timestamp")
 
         # Build feature matrix (only from data up to T)
+        label_col = "label_hypo" if "label_hypo" in current_data.columns else None
         X_all, _ = build_feature_matrix(
             current_data, self.column_map,
-            label_col="label_hypo" if "label_hypo" in current_data.columns
-                       else current_data.columns[-1],
+            label_col=label_col,
             vectorized=True,
         )
 
@@ -302,12 +302,14 @@ class GlucoTwinEngine:
 
         # Calibrated probability (60-minute primary horizon only)
         calibrated_proba_60: Optional[float] = None
+        cal_status_60 = self.calibration_status
         if self.calibrator is not None and self.calibration_status == "CALIBRATED":
             try:
                 calibrated_proba_60 = float(self.calibrator.transform(proba_60))
             except Exception as e:
                 logger.warning(f"Calibration transform error: {e}")
                 calibrated_proba_60 = None
+                cal_status_60 = "RAW_FALLBACK"
 
         # Multi-horizon estimates (scaled from primary model)
         # NOTE: These are scaled approximations, not independently trained horizon models.
@@ -317,6 +319,9 @@ class GlucoTwinEngine:
         ))
         proba_90 = float(np.clip(
             proba_60 * 0.95 + (0.15 if iob > 1.5 else 0.0), 0.0, 1.0
+        ))
+        proba_120 = float(np.clip(
+            proba_60 * 0.90 + (0.20 if iob > 2.0 else 0.0), 0.0, 1.0
         ))
 
         predictions = {
@@ -330,11 +335,11 @@ class GlucoTwinEngine:
             "60min": {
                 "raw_model_probability": round(proba_60, 3),
                 "calibrated_probability": round(calibrated_proba_60, 4) if calibrated_proba_60 is not None else None,
-                "calibration_status": self.calibration_status,
+                "calibration_status": cal_status_60,
                 "alert": bool(proba_60 >= self.threshold),
                 "note": (
                     "Primary model prediction" +
-                    (" (calibrated via isotonic regression)" if self.calibration_status == "CALIBRATED" else " (raw fallback)")
+                    (" (calibrated via isotonic regression)" if cal_status_60 == "CALIBRATED" else " (raw fallback)")
                 ),
             },
             "90min": {
@@ -342,6 +347,13 @@ class GlucoTwinEngine:
                 "calibrated_probability": None,
                 "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
                 "alert": bool(proba_90 >= self.threshold),
+                "note": "Scaled estimate from 60-min model (uncalibrated)",
+            },
+            "120min": {
+                "raw_model_probability": round(proba_120, 3),
+                "calibrated_probability": None,
+                "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
+                "alert": bool(proba_120 >= self.threshold),
                 "note": "Scaled estimate from 60-min model (uncalibrated)",
             },
         }
@@ -624,6 +636,7 @@ class GlucoTwinEngine:
             "prediction_horizon_min": 60,
             "horizon_30min_note": "Scaled estimate from 60-min model (not independently trained)",
             "horizon_90min_note": "Scaled estimate from 60-min model (not independently trained)",
+            "horizon_120min_note": "Scaled estimate from 60-min model (not independently trained)",
             # LOPO cross-validation
             "lopo_roc_auc": 0.970,
             "lopo_roc_auc_std": 0.027,
@@ -641,9 +654,9 @@ class GlucoTwinEngine:
             "test_brier_raw": 0.069,
             "test_brier_calibrated": 0.039,
             # Calibration
-            "calibration_applied": bool(self.calibration_status == "CALIBRATED"),
-            "calibration_status": self.calibration_status,
-            "calibration_method": "isotonic" if self.calibration_status == "CALIBRATED" else "none",
+            "calibration_applied": bool(cal_status_60 == "CALIBRATED"),
+            "calibration_status": cal_status_60,
+            "calibration_method": "isotonic" if cal_status_60 == "CALIBRATED" else "none",
             "calibration_brier": 0.039,
             "calibration_brier_raw": 0.069,
             "calibration_brier_isotonic": 0.039,
@@ -652,7 +665,7 @@ class GlucoTwinEngine:
             "calibration_scope": "60-minute prediction horizon on HUPA-UCM validation cohort",
             "calibration_note": (
                 "Isotonic calibration fit on validation split (Brier=0.0390 vs raw=0.0690 on test set). "
-                f"Live inference status: {self.calibration_status}."
+                f"Live inference status: {cal_status_60}."
             ),
             # Personalization live status
             "personalization": {
@@ -741,3 +754,14 @@ class GlucoTwinEngine:
                 else None
             ),
         )
+
+    def reset(self) -> None:
+        """Reset internal session state, previous transition cache, and alert state machine."""
+        self._prev_alert = None
+        self._prev_risk = None
+        self._prev_timestamp = None
+        self._prev_features = None
+        self._prev_shap = None
+        if hasattr(self, "_alert_sm") and self._alert_sm is not None:
+            self._alert_sm.reset()
+
