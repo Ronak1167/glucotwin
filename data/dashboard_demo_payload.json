@@ -1,6 +1,6 @@
 {
   "twin_state_version": "6",
-  "patient_id": "HUPA0001",
+  "patient_id": "HUPA0001P",
   "timestamp": "2018-06-26 05:55:00",
   "current_glucose_mgdl": 80.0,
   "glucose_velocity_15min": 0.8,
@@ -17,6 +17,9 @@
       "calibrated_probability": null,
       "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
       "alert": false,
+      "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+      "is_derived": true,
+      "is_calibrated": false,
       "note": "Scaled estimate from 60-min model (uncalibrated)"
     },
     "60min": {
@@ -25,6 +28,9 @@
       "calibration_status": "CALIBRATED",
       "alert": false,
       "alert_basis": "CALIBRATED_60MIN_THRESHOLD",
+      "operating_threshold": 0.13,
+      "is_derived": false,
+      "is_calibrated": true,
       "note": "Primary model prediction (calibrated via isotonic regression)"
     },
     "90min": {
@@ -32,6 +38,9 @@
       "calibrated_probability": null,
       "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
       "alert": false,
+      "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+      "is_derived": true,
+      "is_calibrated": false,
       "note": "Scaled estimate from 60-min model (uncalibrated)"
     },
     "120min": {
@@ -39,6 +48,9 @@
       "calibrated_probability": null,
       "calibration_status": "UNSUPPORTED_DERIVED_HORIZON",
       "alert": false,
+      "alert_basis": "DERIVED_UNCALIBRATED_RAW_THRESHOLD",
+      "is_derived": true,
+      "is_calibrated": false,
       "note": "Scaled estimate from 60-min model (uncalibrated)"
     }
   },
@@ -80,8 +92,8 @@
       "direction": "reduces_hypo_risk"
     }
   ],
-  "model_interpretation": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
-  "clinical_narrative": "Current glucose is in the near-hypoglycemia warning zone at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
+  "model_interpretation": "Current glucose is near threshold at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
+  "clinical_narrative": "Current glucose is near threshold at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
   "model_alert_context": "NORMAL: Model probability 6.5%. Metabolic trajectory appears stable.",
   "what_if_simulations": [
     {
@@ -490,14 +502,14 @@
   },
   "twin_confidence": {
     "confidence_level": "HIGH",
-    "confidence_score": 0.974,
+    "confidence_score": 0.777,
     "out_of_distribution": false,
     "reasons": [],
     "components": {
-      "signal_completeness": 1.0,
+      "signal_completeness": 0.5,
       "cgm_continuity": 1.0,
-      "feature_range_score": 0.936,
-      "mahalanobis_percentile": 100.0
+      "feature_range_score": 0.8,
+      "mahalanobis_percentile": 0.0
     }
   },
   "state_transition": null,
@@ -507,7 +519,7 @@
     "n_state_transitions": 0,
     "recent_risk_timeline": [],
     "memory_summary": {
-      "patient_id": "HUPA0001",
+      "patient_id": "HUPA0001P",
       "n_state_snapshots": 1,
       "n_transitions": 0,
       "n_episodes": 0,
@@ -536,6 +548,7 @@
     "lopo_f2": 0.754,
     "lopo_n_patients": 24,
     "lopo_threshold_used": 0.25,
+    "operating_threshold": 0.25,
     "production_alert_threshold": 0.13,
     "production_alert_threshold_scale": "calibrated",
     "production_alert_exit_threshold": 0.08,
