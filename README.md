@@ -186,7 +186,7 @@ import joblib
 
 # Initialize
 classifier = joblib.load("models/glucotwin_production_model.joblib")
-engine = GlucoTwinEngine(patient_id="HUPA0001", classifier=classifier, column_map=...)
+engine = GlucoTwinEngine(patient_id="HUPA0001P", classifier=classifier, column_map=...)
 api = GlucoTwinAPI(engine=engine)
 ```
 

@@ -75,7 +75,7 @@ def run_pipeline():
     logger.info(f"Processing benchmark cohort of {len(benchmark_files)} patients...")
 
     for f in benchmark_files:
-        p_id = f.stem.replace("P", "")
+        p_id = f.stem
         try:
             df_raw = load_patient_raw(f)
             df_clean = preprocess_patient(df_raw, COLUMN_MAP)
