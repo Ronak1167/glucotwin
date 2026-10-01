@@ -1,0 +1,22 @@
+{
+  "n_episodes": 252,
+  "n_detected": 205,
+  "n_missed": 47,
+  "episode_detection_rate_pct": 81.3,
+  "n_fp_samples": 10107,
+  "n_fp_events": 1313,
+  "false_alarm_events_per_day": 0.92,
+  "false_alarm_samples_per_day": 7.09,
+  "mean_lead_time_min": 45.4,
+  "median_lead_time_min": 60.0,
+  "std_lead_time_min": 18.8,
+  "p25_lead_time_min": 35.0,
+  "p75_lead_time_min": 60.0,
+  "min_lead_time_min": 0.0,
+  "max_lead_time_min": 60.0,
+  "pct_gt_15min": 87.8,
+  "pct_gt_30min": 75.1,
+  "operating_threshold": 0.25,
+  "split_protocol": "Chronological 80/20 holdout",
+  "n_test_samples": 61883
+}

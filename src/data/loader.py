@@ -86,15 +86,11 @@ def get_patient_files(data_dir: str | Path) -> List[Path]:
 
 def extract_patient_id(filepath: Path) -> str:
     """
-    Extract patient ID from filename.
+    Extract canonical patient ID from filename.
     
-    HUPA-UCM: HUPA0001P.csv → "HUPA0001"
+    HUPA-UCM: HUPA0001P.csv → "HUPA0001P"
     """
-    stem = filepath.stem
-    # Remove trailing 'P' if present (preprocessed indicator)
-    if stem.endswith("P"):
-        return stem[:-1]
-    return stem
+    return filepath.stem
 
 
 def load_patient_raw(
@@ -210,7 +206,12 @@ def load_all_patients(
     
     if patient_ids is not None:
         patient_id_set = set(patient_ids)
-        files = [f for f in files if extract_patient_id(f) in patient_id_set]
+        files = [
+            f for f in files
+            if extract_patient_id(f) in patient_id_set
+            or extract_patient_id(f).rstrip("P") in patient_id_set
+            or (extract_patient_id(f) + "P") in patient_id_set
+        ]
         logger.info(f"Filtered to {len(files)} patients: {patient_ids}")
     
     patients: Dict[str, pd.DataFrame] = {}

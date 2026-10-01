@@ -65,5 +65,6 @@ logs/
 # Temp outputs — keep reports/docs
 outputs/tmp/
 .pytest_tmp/
+.tmp_test_run/
 .pytest_cache/
 .agent-collab/
