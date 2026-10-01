@@ -876,7 +876,7 @@ def test_twin_temporal_integrity_comprehensive():
 
 # ─── Test 22: Isotonic Calibrator Properties ──────────────────────────────────
 
-def test_isotonic_calibrator_properties(tmp_path):
+def test_isotonic_calibrator_properties():
     """
     Verify IsotonicCalibrator mathematical, input-validation, and persistence properties:
     - [0, 1] input acceptance and output bounding
@@ -885,6 +885,8 @@ def test_isotonic_calibrator_properties(tmp_path):
     - Rejection of invalid inputs (NaNs, negatives, >1.0)
     - Serialization (save) and deserialization (load) round-trip with metadata preservation
     """
+    import tempfile
+
     np.random.seed(42)
     n = 200
     raw_p = np.random.uniform(0.0, 1.0, size=n)
@@ -923,14 +925,15 @@ def test_isotonic_calibrator_properties(tmp_path):
         cal.transform(np.array([np.nan, 0.5]))
 
     # Serialization and loading
-    save_path = tmp_path / "test_calibrator.joblib"
-    cal.save(save_path)
-    assert save_path.exists()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        save_path = Path(tmp_dir) / "test_calibrator.joblib"
+        cal.save(save_path)
+        assert save_path.exists()
 
-    loaded_cal = IsotonicCalibrator.load(save_path)
-    assert loaded_cal.is_fitted_
-    assert loaded_cal.metadata.get("author") == "Ronak"
-    np.testing.assert_array_equal(loaded_cal.transform(test_grid), cal_grid)
+        loaded_cal = IsotonicCalibrator.load(save_path)
+        assert loaded_cal.is_fitted_
+        assert loaded_cal.metadata.get("author") == "Ronak"
+        np.testing.assert_array_equal(loaded_cal.transform(test_grid), cal_grid)
 
 
 # ─── Test 23: Calibrator Zero Test Leakage ─────────────────────────────────────
