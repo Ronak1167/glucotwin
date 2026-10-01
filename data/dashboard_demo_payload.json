@@ -94,7 +94,7 @@
   ],
   "model_interpretation": "Current glucose is near threshold at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
   "clinical_narrative": "Current glucose is near threshold at 80 mg/dL. Nocturnal context is included as a model feature. Primary risk drivers identified by twin: is near hypo.",
-  "model_alert_context": "NORMAL: Model probability 6.5%. Metabolic trajectory appears stable.",
+  "model_alert_context": "NORMAL: Calibrated 60-min P(hypo)=6.5%; raw model P=25.1%. Metabolic trajectory appears stable.",
   "what_if_simulations": [
     {
       "scenario": "No intervention \u2014 baseline simulated trajectory",
@@ -502,14 +502,14 @@
   },
   "twin_confidence": {
     "confidence_level": "HIGH",
-    "confidence_score": 0.777,
+    "confidence_score": 0.974,
     "out_of_distribution": false,
     "reasons": [],
     "components": {
-      "signal_completeness": 0.5,
+      "signal_completeness": 1.0,
       "cgm_continuity": 1.0,
-      "feature_range_score": 0.8,
-      "mahalanobis_percentile": 0.0
+      "feature_range_score": 0.936,
+      "mahalanobis_percentile": 100.0
     }
   },
   "state_transition": null,

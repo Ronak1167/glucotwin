@@ -48,7 +48,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from src.data.loader import get_patient_files, load_patient_raw, COLUMN_MAP
+from src.data.loader import get_patient_files, load_patient_raw, COLUMN_MAP, extract_patient_id
 from src.data.preprocessing import preprocess_patient
 from src.data.labels import generate_prediction_labels
 from src.features.engineer import build_feature_matrix
@@ -1333,3 +1333,251 @@ def test_feature_ablation_definitions_and_protocol():
     assert "roc_auc" in study["ablation_results"]["full_model"]["metrics"]
     assert "evaluation_protocol" in study
 
+
+# --- Test 30: Calibrated Alert Decisions & Operating Threshold Compatibility --
+
+def test_calibrated_alert_decisions_and_operating_threshold_compatibility():
+    """
+    TEST 30: Calibrated 60-min predictions must drive alert decisions when
+    calibrator is loaded, using documented operating thresholds (0.13 entry, 0.08 exit),
+    while preserving backward-compatible public operating_threshold (0.25).
+    """
+    files = get_patient_files(DATA_DIR)
+    assert len(files) > 0
+    df_raw = load_patient_raw(files[0])
+    df_clean = preprocess_patient(df_raw, COLUMN_MAP)
+    df_labeled = generate_prediction_labels(
+        df_clean, "glucose_mgdl", "timestamp", prediction_horizon_min=60
+    )
+    X, y = build_feature_matrix(df_labeled, COLUMN_MAP, vectorized=True)
+    clf = HypoClassifier(model_type="lightgbm").fit(X, y)
+
+    prod_cal_path = Path("models/glucotwin_calibrator.joblib")
+    assert prod_cal_path.exists(), "Production calibrator artifact required for test"
+
+    # 1. Calibrated engine
+    engine_cal = GlucoTwinEngine(
+        patient_id="TEST_CAL_30",
+        classifier=clf,
+        column_map=COLUMN_MAP,
+        operating_threshold=0.25,
+        calibrator_path=prod_cal_path,
+    )
+
+    # Public operating_threshold backwards compatibility
+    assert engine_cal.operating_threshold == 0.25
+    assert engine_cal.threshold == 0.25
+
+    # Alert decision thresholds
+    assert engine_cal.alert_decision_uses_calibration is True
+    assert engine_cal.alert_decision_threshold == pytest.approx(0.13)
+    assert engine_cal.alert_decision_exit_threshold == pytest.approx(0.08)
+
+    state = engine_cal.evaluate_state(df_labeled, current_idx=-1)
+    d = state.to_dict()
+    pred_60 = d["predictions_by_horizon"]["60min"]
+
+    # Verify probability driving alert flag
+    prob_used = pred_60["calibrated_probability"]
+    assert pred_60["alert"] == (prob_used >= engine_cal.alert_decision_threshold)
+    assert pred_60["operating_threshold"] == pytest.approx(0.13)
+    assert pred_60["alert_basis"] == "CALIBRATED_60MIN_THRESHOLD"
+
+    # 2. Fallback engine (uncalibrated)
+    engine_raw = GlucoTwinEngine(
+        patient_id="TEST_RAW_30",
+        classifier=clf,
+        column_map=COLUMN_MAP,
+        operating_threshold=0.25,
+        calibrator=None,
+    )
+    assert engine_raw.alert_decision_uses_calibration is False
+    assert engine_raw.alert_decision_threshold == 0.25
+    assert engine_raw.operating_threshold == 0.25
+
+    state_raw = engine_raw.evaluate_state(df_labeled, current_idx=-1)
+    d_raw = state_raw.to_dict()
+    pred_60_raw = d_raw["predictions_by_horizon"]["60min"]
+
+    assert pred_60_raw["operating_threshold"] == 0.25
+    assert pred_60_raw["alert"] == (pred_60_raw["probability"] >= 0.25)
+    assert pred_60_raw["alert_basis"] == "RAW_THRESHOLD"
+
+
+# --- Test 31: Multi-Horizon Derived & Uncalibrated Guarantees ----------------
+
+def test_multi_horizon_derived_uncalibrated_guarantees():
+    """
+    TEST 31: 30, 90, and 120-minute predictions must be explicitly marked as
+    derived and uncalibrated, while 60-min is calibrated and under primary supervision.
+    """
+    files = get_patient_files(DATA_DIR)
+    df_raw = load_patient_raw(files[0])
+    df_clean = preprocess_patient(df_raw, COLUMN_MAP)
+    df_labeled = generate_prediction_labels(
+        df_clean, "glucose_mgdl", "timestamp", prediction_horizon_min=60
+    )
+    X, y = build_feature_matrix(df_labeled, COLUMN_MAP, vectorized=True)
+    clf = HypoClassifier(model_type="lightgbm").fit(X, y)
+
+    prod_cal_path = Path("models/glucotwin_calibrator.joblib")
+    engine = GlucoTwinEngine(
+        patient_id="TEST_HORIZONS_31",
+        classifier=clf,
+        column_map=COLUMN_MAP,
+        operating_threshold=0.25,
+        calibrator_path=prod_cal_path,
+    )
+    state = engine.evaluate_state(df_labeled, current_idx=-1)
+    d = state.to_dict()
+    preds = d["predictions_by_horizon"]
+
+    # 60min is calibrated and not derived
+    assert preds["60min"]["is_derived"] is False
+    assert preds["60min"]["is_calibrated"] is True
+    assert preds["60min"]["calibrated_probability"] is not None
+    assert preds["60min"]["calibration_status"] == "CALIBRATED"
+
+    # 30min, 90min, 120min are derived and uncalibrated
+    for h in ["30min", "90min", "120min"]:
+        p = preds[h]
+        assert p["is_derived"] is True, f"Expected {h} to have is_derived=True"
+        assert p["is_calibrated"] is False, f"Expected {h} to have is_calibrated=False"
+        assert p["calibrated_probability"] is None, f"Expected {h} to have calibrated_probability=None"
+        assert p["calibration_status"] == "UNSUPPORTED_DERIVED_HORIZON"
+        assert p["alert_basis"] == "DERIVED_UNCALIBRATED_RAW_THRESHOLD"
+
+
+# --- Test 32: Alert Context & Narrative Neutrality -------------------------
+
+def test_alert_context_and_narrative_neutrality():
+    """
+    TEST 32: Alert context text must report calibrated probability as primary,
+    and all narrative texts must use neutral model-context wording free of
+    unsupported clinical diagnostics or prescriptive instructions.
+    """
+    files = get_patient_files(DATA_DIR)
+    df_raw = load_patient_raw(files[0])
+    df_clean = preprocess_patient(df_raw, COLUMN_MAP)
+    df_labeled = generate_prediction_labels(
+        df_clean, "glucose_mgdl", "timestamp", prediction_horizon_min=60
+    )
+    X, y = build_feature_matrix(df_labeled, COLUMN_MAP, vectorized=True)
+    clf = HypoClassifier(model_type="lightgbm").fit(X, y)
+
+    prod_cal_path = Path("models/glucotwin_calibrator.joblib")
+    engine = GlucoTwinEngine(
+        patient_id="TEST_NARRATIVE_32",
+        classifier=clf,
+        column_map=COLUMN_MAP,
+        operating_threshold=0.25,
+        calibrator_path=prod_cal_path,
+    )
+    state = engine.evaluate_state(df_labeled, current_idx=-1)
+    d = state.to_dict()
+
+    # 1. Alert context text reports calibrated probability as primary
+    alert_ctx = d.get("model_alert_context", "")
+    assert "Calibrated 60-min P(hypo)=" in alert_ctx
+    assert "raw model P=" in alert_ctx
+    assert "Monitor CGM readings" not in alert_ctx
+
+    # 2. Check narrative neutrality across all output text fields
+    full_narratives = " ".join([
+        d.get("patient_narrative", ""),
+        d.get("model_interpretation", ""),
+        d.get("model_alert_context", ""),
+    ])
+
+    forbidden_phrases = [
+        "level 1 hypoglycemia",
+        "near-hypoglycemia warning zone",
+        "counter-regulatory",
+        "symptom awareness",
+        "monitor cgm readings",
+    ]
+    for phrase in forbidden_phrases:
+        assert phrase not in full_narratives.lower(), f"Forbidden phrase '{phrase}' found in narratives"
+
+
+# --- Test 33: Absence of Misleading Recommendation Fields ------------------
+
+def test_absence_of_misleading_recommendation_fields():
+    """
+    TEST 33: TwinState and its serialized dictionary representation must NOT
+    contain misleading recommendation fields ('recommended_action'), while
+    maintaining backward compatibility via object attribute access.
+    """
+    state = TwinState(
+        twin_state_version="6",
+        patient_id="TEST_REC_33",
+        timestamp="2026-01-01T12:00:00",
+        current_glucose_mgdl=110.0,
+        glucose_velocity_15min=-0.5,
+        glucose_acceleration_30min=0.0,
+        glucose_trend="STABLE",
+        alert_level="NORMAL",
+    )
+
+    # Object attribute access compatibility
+    assert hasattr(state, "recommended_action")
+    assert state.recommended_action is None
+
+    # Serialized dict must omit recommended_action
+    d = state.to_dict()
+    assert "recommended_action" not in d
+
+    # JSON output must omit recommended_action
+    json_str = json.dumps(d)
+    assert '"recommended_action"' not in json_str
+
+
+# --- Test 34: Canonical Patient ID & Demo Payload Consistency --------------
+
+def test_canonical_patient_id_and_demo_payload_consistency():
+    """
+    TEST 34: Patient ID extraction must preserve canonical 'P' suffix (e.g. HUPA0001P),
+    and data/dashboard_demo_payload.json must be fully consistent with backend contracts.
+    """
+    # 1. extract_patient_id convention check
+    assert extract_patient_id(Path("data/raw/HUPA0001P.csv")) == "HUPA0001P"
+    assert extract_patient_id(Path("data/raw/HUPA0023P.csv")) == "HUPA0023P"
+
+    # 2. Demo payload consistency
+    payload_path = Path("data/dashboard_demo_payload.json")
+    assert payload_path.exists(), "dashboard_demo_payload.json must exist"
+
+    with open(payload_path, "r", encoding="utf-8") as f:
+        demo = json.load(f)
+
+    # Patient ID check
+    assert demo["patient_id"] == "HUPA0001P"
+
+    # 60min horizon checks
+    pred_60 = demo["predictions_by_horizon"]["60min"]
+    assert pred_60["calibration_status"] == "CALIBRATED"
+    assert pred_60["is_calibrated"] is True
+    assert pred_60["is_derived"] is False
+    assert pred_60["alert_basis"] == "CALIBRATED_60MIN_THRESHOLD"
+    assert pred_60["operating_threshold"] == 0.13
+    assert pred_60["calibrated_probability"] == pytest.approx(0.0649, abs=1e-3)
+    assert pred_60["alert"] is False, "0.0649 is below 0.13 threshold, alert must be False"
+
+    # Multi-horizon checks
+    for h in ["30min", "90min", "120min"]:
+        pred_h = demo["predictions_by_horizon"][h]
+        assert pred_h["is_derived"] is True
+        assert pred_h["is_calibrated"] is False
+        assert pred_h["calibrated_probability"] is None
+        assert pred_h["calibration_status"] == "UNSUPPORTED_DERIVED_HORIZON"
+
+    # Recommendation and narrative checks
+    assert "recommended_action" not in demo
+    demo_text = " ".join([
+        demo.get("patient_narrative", ""),
+        demo.get("model_interpretation", ""),
+        demo.get("model_alert_context", ""),
+    ]).lower()
+
+    for phrase in ["level 1 hypoglycemia", "warning zone", "counter-regulatory", "symptom awareness", "monitor cgm readings"]:
+        assert phrase not in demo_text, f"Forbidden phrase '{phrase}' found in demo payload"

@@ -47,6 +47,8 @@ logger = logging.getLogger(__name__)
 # are different scales, so the corresponding operating thresholds must not be mixed.
 CALIBRATED_ALERT_ENTRY_THRESHOLD = 0.13
 CALIBRATED_ALERT_EXIT_THRESHOLD = 0.08
+_AUTO_CALIBRATOR_PATH = object()
+_AUTO_CALIBRATOR = object()
 
 
 def _classify_trend(velocity_mgdl_per_min: float) -> str:
@@ -171,8 +173,8 @@ class GlucoTwinEngine:
         classifier: HypoClassifier,
         column_map: Dict[str, str],
         operating_threshold: float = 0.25,
-        calibrator: Optional[Any] = None,
-        calibrator_path: Optional[str | Path] = Path("models/glucotwin_calibrator.joblib"),
+        calibrator: Optional[Any] | object = _AUTO_CALIBRATOR,
+        calibrator_path: Optional[str | Path] | object = _AUTO_CALIBRATOR_PATH,
     ):
         self.patient_id = patient_id
         self.classifier = classifier
@@ -188,12 +190,17 @@ class GlucoTwinEngine:
         # Calibration integration (Phase 9.2)
         self.calibrator = None
         self.calibration_status = "RAW_FALLBACK"
-        if calibrator is not None:
-            self.calibrator = calibrator
-            self.calibration_status = "CALIBRATED"
-            logger.debug(f"[{patient_id}] Using explicitly passed calibrator instance.")
-        elif calibrator_path is not None:
-            cal_p = Path(calibrator_path)
+        if calibrator is not _AUTO_CALIBRATOR:
+            if calibrator is not None:
+                self.calibrator = calibrator
+                self.calibration_status = "CALIBRATED"
+                logger.debug(f"[{patient_id}] Using explicitly passed calibrator instance.")
+            else:
+                # Explicit calibrator=None means force raw fallback; do not auto-load.
+                self.calibrator = None
+                self.calibration_status = "RAW_FALLBACK"
+        elif calibrator_path is _AUTO_CALIBRATOR_PATH:
+            cal_p = Path("models/glucotwin_calibrator.joblib")
             if cal_p.exists():
                 try:
                     self.calibrator = IsotonicCalibrator.load(cal_p)
@@ -209,6 +216,16 @@ class GlucoTwinEngine:
             else:
                 self.calibrator = None
                 self.calibration_status = "RAW_FALLBACK"
+        elif calibrator_path is not None:
+            cal_p = Path(calibrator_path)
+            if cal_p.exists():
+                try:
+                    self.calibrator = IsotonicCalibrator.load(cal_p)
+                    self.calibration_status = "CALIBRATED"
+                except Exception as e:
+                    logger.warning(f"[{patient_id}] Failed loading calibrator from {cal_p}: {e}")
+                    self.calibrator = None
+                    self.calibration_status = "RAW_FALLBACK"
 
         # Previous state for transition tracking
         self._prev_alert: Optional[str] = None
@@ -362,6 +379,8 @@ class GlucoTwinEngine:
                 "note": "Scaled estimate from 60-min model (uncalibrated)",
             },
             "60min": {
+                # Backward-compatible primary probability alias: calibrated when available, raw otherwise.
+                "probability": round(alert_probability, 4),
                 "raw_model_probability": round(proba_60, 3),
                 "calibrated_probability": round(calibrated_proba_60, 4) if calibrated_proba_60 is not None else None,
                 "calibration_status": cal_status_60,
@@ -548,29 +567,29 @@ class GlucoTwinEngine:
             f"threshold at the current trajectory (full-cohort MAE: 32.5 min, median AE: 17.6 min)."
             if estimated_ttt is not None else ""
         )
+        prob_label = (
+            f"Calibrated 60-min P(hypo)={calibrated_proba_60:.1%}; raw model P={proba_60:.1%}"
+            if calibrated_proba_60 is not None
+            else f"Raw 60-min P(hypo)={proba_60:.1%}"
+        )
         if alert == AlertLevel.CRITICAL:
             model_alert_context = (
-                f"CRITICAL: Model predicted probability {alert_probability:.1%} "
-                f"for threshold crossing within 60 min."
-                f"{' (calibrated; raw model probability ' + format(proba_60, '.1%') + ')' if calibrated_proba_60 is not None else ''}"
+                f"CRITICAL: {prob_label} for threshold crossing within 60 min."
                 f"{ttt_str} "
                 f"{'Nocturnal context is included as a model feature.' if is_nocturnal else ''}"
             )
         elif alert == AlertLevel.WARNING:
             model_alert_context = (
-                f"WARNING: Model predicted probability {alert_probability:.1%} "
-                f"for threshold crossing within 60 min."
-                f"{' (calibrated; raw model probability ' + format(proba_60, '.1%') + ')' if calibrated_proba_60 is not None else ''}"
+                f"WARNING: {prob_label} for threshold crossing within 60 min."
                 f"{ttt_str}"
             )
         elif alert == AlertLevel.WATCH:
             model_alert_context = (
-                f"WATCH: Mild downward drift detected. Model probability {alert_probability:.1%}."
+                f"WATCH: Mild downward drift detected. {prob_label}."
             )
         else:
             model_alert_context = (
-                f"NORMAL: Model probability {alert_probability:.1%}. "
-                "Metabolic trajectory appears stable."
+                f"NORMAL: {prob_label}. Metabolic trajectory appears stable."
             )
 
         # ── MEMORY: Historical Episode Matching ───────────────────────────────
