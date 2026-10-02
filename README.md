@@ -1,13 +1,15 @@
 # GlucoTwin: Predictive Metabolic Digital Twin for Hypoglycemia Risk
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![CI](https://github.com/Ronak1167/glucotwin/actions/workflows/ci.yml/badge.svg)](https://github.com/Ronak1167/glucotwin/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TwinState: v6](https://img.shields.io/badge/TwinState-v6_Production-green.svg)]()
 [![Dataset: HUPA--UCM](https://img.shields.io/badge/DOI-10.17632%2F3hbcscwz44.1-blue)](https://doi.org/10.17632/3hbcscwz44.1)
 
 > **CRP Digital Twin Challenge 2026** (Happiest Health)  
-> **Backend / ML / Digital Twin Research & Engineering**: Ronak Jain (`ronak-ml`)  
-> **Frontend / Clinical Interface & Dashboard**: Aishni (`main` / UI)
+> **Backend / ML / Digital Twin Research & Engineering**: Ronak Jain ([@Ronak1167](https://github.com/Ronak1167))  
+> **Frontend / Clinical Interface & Dashboard**: Aishni Rathore ([@wildchord](https://github.com/wildchord))  
+> **Contribution & Protection Guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ---
 
