@@ -11,6 +11,15 @@
 > **Frontend / Clinical Interface & Dashboard**: Aishni Rathore ([@wildchord](https://github.com/wildchord))  
 > **Contribution & Protection Guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md)
 
+### 🏆 Official Competition Submission Deliverables
+| Deliverable | Format | Link / Path | Description |
+| :--- | :--- | :--- | :--- |
+| **Official Submission Dossier** | Markdown | [SUBMISSION.md](docs/submission/SUBMISSION.md) | Comprehensive project overview, clinical problem, architecture, benchmarks, and disclaimers. |
+| **Full Demonstration Video** | MP4 Video (720p, 19.9 min) | [GlucoTwin_Demo_Video.mp4](docs/submission/GlucoTwin_Demo_Video.mp4) | Complete dual-speaker presentation by Ronak Jain & Aishni Rathore. |
+| **System Architecture Diagram** | Vector PDF | [GlucoTwin_Architecture_Diagram.pdf](docs/submission/GlucoTwin_Architecture_Diagram.pdf) | High-resolution engineering blueprint of data, ML, ODE, and Twin Core. |
+| **Presentation Slide Deck** | PowerPoint PPTX | [GlucoTwin_Presentation.pptx](docs/submission/GlucoTwin_Presentation.pptx) | 11-slide widescreen presentation deck. |
+| **Interactive Clinical Dashboard** | Streamlit + Plotly Web App | [app.py](app.py) | Run with `streamlit run app.py` for live multi-patient monitoring & What-If sliders. |
+
 ---
 
 ## 1. Executive Summary & Clinical Problem
@@ -281,12 +290,12 @@ streamlit run app.py
 ---
 
 ## 9. Verification & Test Suite
-
+ 
 Run all verification gates locally:
-
+ 
 ```bash
-# 1. Run Complete PyTest Suite (Zero Warnings)
-python -m pytest tests/test_glucotwin.py -v -W error::UserWarning
+# 1. Run Complete PyTest Suite (38 Tests Passing)
+python -m pytest tests/ -v
 
 # 2. Syntax & Bytecode Compilation Check
 python -m compileall -q src scripts
@@ -303,7 +312,7 @@ python scripts/analyze_hupa0023p.py
 
 ---
 
-## 9. Limitations & Ethical Considerations
+## 10. Limitations & Ethical Considerations
 
 1. **Observational Cohort**: The model was trained and evaluated on retrospective data from 25 Spanish adults with Type 1 Diabetes. Performance across pediatric populations, gestational diabetes, or Type 2 diabetes is unknown.
 2. **Sensor Hardware**: The data utilizes FreeStyle Libre 2 CGMs. Differences in factory calibration, sensor latency, or compression artifacts across other devices (e.g. Dexcom G7) may affect feature distributions.
