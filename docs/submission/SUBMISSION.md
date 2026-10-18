@@ -26,7 +26,7 @@ All submission assets have been generated, verified, and placed in the repositor
 | :--- | :--- | :--- | :--- |
 | **1. Demonstration Video** | MP4 (720p HD, 19.9 min) | `docs/submission/GlucoTwin_Demo_Video.mp4` | Dual-voice presentation by Ronak Jain & Aishni Rathore covering problem, architecture, ML calibration, live dashboard walkthrough, and benchmarks. |
 | **2. Architecture Diagram** | PDF (Vector, Landscape A4) | `docs/submission/GlucoTwin_Architecture_Diagram.pdf` | High-fidelity blueprint detailing Data Ingestion, Preprocessing, 50-Feature Stack, ML Engine, Simulator, and Twin Core. |
-| **3. Presentation Slide Deck** | PPTX (16:9 Widescreen, 11 slides) | `docs/submission/GlucoTwin_Presentation.pptx` | Comprehensive slide deck with executive summary, methodology, LOPO tables, dashboard screenshots, and research disclaimers. |
+| **3. Presentation Slide Deck** | PPTX (16:9 Widescreen) & PDF | `docs/submission/GlucoTwin_Presentation.pptx`<br>`docs/submission/GlucoTwin_Presentation.pdf` | Comprehensive slide deck with executive summary, methodology, LOPO tables, dashboard screenshots, and research disclaimers. |
 | **4. Interactive Clinical Dashboard** | Streamlit + Plotly Web App | `app.py` | Full multi-patient monitoring dashboard with live inference, What-If scenario sliders, SHAP attribution, and zero-crash demo mode. |
 | **5. Automated Test Suite** | PyTest (38 tests) | `tests/` | 34 ML engine tests + 4 dashboard integration tests passing in CI on Python 3.10 and 3.11. |
 
