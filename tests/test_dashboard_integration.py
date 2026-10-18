@@ -27,7 +27,18 @@ from src.simulation.simulator import MetabolicSimulator
 
 MODEL_PATH = Path("models/glucotwin_production_model.joblib")
 CALIBRATOR_PATH = Path("models/glucotwin_calibrator.joblib")
-DATA_DIR = Path("data/raw/hupa_ucm/Preprocessed")
+def _resolve_data_dir() -> Path:
+    candidates = [
+        Path("data/raw/hupa_ucm/Preprocessed"),
+        Path("data/raw/hupa_ucm/HUPA-UCM Diabetes Dataset/Preprocessed"),
+        Path("data/raw/hupa_ucm"),
+    ]
+    for c in candidates:
+        if c.exists() and any(c.glob("HUPA*.csv")):
+            return c
+    return candidates[0]
+
+DATA_DIR = _resolve_data_dir()
 DEMO_PATH = Path("data/dashboard_demo_payload.json")
 
 

@@ -79,7 +79,18 @@ _ROOT = Path(__file__).resolve().parent
 DATA_PATH = _ROOT / "data" / "dashboard_demo_payload.json"
 MODEL_PATH = _ROOT / "models" / "glucotwin_production_model.joblib"
 CALIBRATOR_PATH = _ROOT / "models" / "glucotwin_calibrator.joblib"
-DATA_DIR = _ROOT / "data" / "raw" / "hupa_ucm" / "Preprocessed"
+def _resolve_data_dir() -> Path:
+    candidates = [
+        _ROOT / "data" / "raw" / "hupa_ucm" / "Preprocessed",
+        _ROOT / "data" / "raw" / "hupa_ucm" / "HUPA-UCM Diabetes Dataset" / "Preprocessed",
+        _ROOT / "data" / "raw" / "hupa_ucm",
+    ]
+    for c in candidates:
+        if c.exists() and any(c.glob("HUPA*.csv")):
+            return c
+    return candidates[0]
+
+DATA_DIR = _resolve_data_dir()
 
 
 # ── Utility Functions ─────────────────────────────────────────────────────────
