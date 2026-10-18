@@ -251,7 +251,36 @@ api.export_demo_json("reports/demo_snapshot.json", snapshot)
 
 ---
 
-## 8. Verification & Test Suite
+## 8. Streamlit Frontend Dashboard
+
+GlucoTwin includes an interactive clinical decision-support and simulation dashboard built with Streamlit and Plotly.
+
+### Launching the Dashboard
+
+From the project root:
+
+```bash
+streamlit run app.py
+```
+
+### Dashboard Modes & Features:
+1. **Live Inference Mode (Default)**:
+   - Evaluates the patient record dynamically using the trained `HypoClassifier` and `IsotonicCalibrator`.
+   - Computes live glucose metrics, 60-min calibrated risk probability, and multi-horizon derived projections.
+   - Computes SHAP explainability factors on the fly via `TwinExplainer`.
+   - Indexes past patient time series to extract genuine historical precedents matching current physiological state.
+   - Assesses data quality, CGM continuity, and Mahalanobis feature-space distance with `OODDetector`.
+2. **Interactive What-If Metabolic Simulation**:
+   - Offers precomputed standardized interventions (15g fast carbs, 25g snack) as well as **live interactive sliders** (carbohydrates 0–80g, fast/complex absorption, bolus insulin 0–8U, exercise intensity, 30–180 min horizons).
+   - Recalculates prospective trajectories dynamically using `MetabolicSimulator` and visualizes baseline vs counterfactual nadir with 70 mg/dL threshold detection.
+3. **Multi-Patient Navigation**:
+   - Sidebar dropdown enables monitoring any of the 25 cohort patients (`HUPA0001P`–`HUPA0025P`).
+4. **Demonstration Fallback (Demo Mode)**:
+   - If model artifacts or patient datasets are absent, the dashboard automatically falls back to verified static demonstration data (`data/dashboard_demo_payload.json`) with clear visual banners and error diagnostic details.
+
+---
+
+## 9. Verification & Test Suite
 
 Run all verification gates locally:
 
