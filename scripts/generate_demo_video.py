@@ -1,14 +1,14 @@
 """
-GlucoTwin Demo Video Generator
+GlucoTwin Demo Video Generator (Enhanced with Live Application Screen Captures)
 Voices: Microsoft David (Ronak, Male) + Microsoft Zira (Aishni, Female)
-Engine: Offline Windows SAPI5 via pyttsx3 + FFmpeg via imageio_ffmpeg
+Engine: Offline Windows SAPI5 via win32com + FFmpeg via imageio_ffmpeg
 Output: docs/submission/GlucoTwin_Demo_Video.mp4
 """
 import os, sys, wave, subprocess
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import imageio_ffmpeg
-import pyttsx3
+import win32com.client
 
 ROOT = Path(r"C:\Users\Ronak Jain\Desktop\glucotwin")
 OUT_DIR = ROOT / "docs" / "submission"
@@ -20,13 +20,9 @@ AUDIO_TMP.mkdir(parents=True, exist_ok=True)
 SLIDES_TMP.mkdir(parents=True, exist_ok=True)
 CLIPS_TMP.mkdir(parents=True, exist_ok=True)
 
-VOICE_RONAK = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0"
-VOICE_AISHNI = r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
-
 W_VID, H_VID = 1280, 720
 FPS = 24
 
-# Font setup with fallback
 def get_fonts():
     try:
         title_font = ImageFont.truetype(r"C:\Windows\Fonts\segoeuib.ttf", 32)
@@ -48,7 +44,7 @@ def get_fonts():
 # 20-SEGMENT SCRIPT & SLIDE DEFINITIONS
 # ──────────────────────────────────────────────────────────
 SEGMENTS = [
-    # 00
+    # 00 - Intro Ronak
     {
         "speaker": "R",
         "audio_text": """
@@ -89,7 +85,7 @@ for real-time hypoglycemia risk assessment in Type 1 Diabetes patients.
         ]
     },
 
-    # 01
+    # 01 - Intro Aishni
     {
         "speaker": "A",
         "audio_text": """
@@ -132,7 +128,7 @@ Let us start with the problem we are solving.
         ]
     },
 
-    # 02
+    # 02 - Problem Statement
     {
         "speaker": "R",
         "audio_text": """
@@ -181,7 +177,7 @@ GlucoTwin was built to solve all three of these gaps simultaneously.
         ]
     },
 
-    # 03
+    # 03 - Data Foundation
     {
         "speaker": "R",
         "audio_text": """
@@ -227,7 +223,7 @@ and all rolling windows use closed-left guards to guarantee zero data leakage fr
         ]
     },
 
-    # 04
+    # 04 - Feature Engineering
     {
         "speaker": "R",
         "audio_text": """
@@ -271,7 +267,7 @@ This feature stack feeds two parallel components: the ML prediction engine and t
         ]
     },
 
-    # 05
+    # 05 - ML Engine
     {
         "speaker": "R",
         "audio_text": """
@@ -321,7 +317,7 @@ These are hospital-grade classification metrics achieved without any patient-spe
         ]
     },
 
-    # 06
+    # 06 - Differentiator 1 & 2
     {
         "speaker": "R",
         "audio_text": """
@@ -373,7 +369,7 @@ We report stratified uncertainty tiers — LOW and MODERATE — to communicate c
         ]
     },
 
-    # 07
+    # 07 - Live App Screen: Model Self-Awareness & Alert FSM
     {
         "speaker": "R",
         "audio_text": """
@@ -398,37 +394,16 @@ directly in every inference response.
 The OOD Detector computes a Mahalanobis distance of the current feature vector from the training distribution
 and scores a twin_confidence value between 0.0 and 1.0, so clinicians know when to trust the output less.
 """,
-        "category": "DIGITAL TWIN DIFFERENTIATORS (PART 2)",
-        "title": "Stateful Alert FSM & OOD Guardrails",
-        "subtitle": "85% Alarm Burden Reduction with 100% Retrospective Episode Recall",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Live Model Self-Awareness & OOD Guardrails",
+        "subtitle": "Section 7 of Dashboard: Exposing LOPO AUC, Brier Score, and Sensor Continuity",
         "badge_speaker": "Ronak Jain  |  ML Architecture & Lead Engineer",
         "speaker_color": (37, 99, 235),
-        "cards": [
-            {
-                "title": "Alert State Machine (FSM) Hysteresis",
-                "accent": (16, 185, 129),
-                "items": [
-                    "3-State Architecture: NORMAL → WATCH (p > 0.13) → ALARM (sustained risk)",
-                    "8-Point Hysteresis Gap: Return to NORMAL requires probability to drop below 0.08",
-                    "15-Minute Cooldown Guard: Eliminates rapid chattering alert transitions",
-                    "Dramatic Alarm Reduction: 29.21 alarms/day → 4.39 episodes/day (85% reduction!)",
-                    "Zero Safety Compromise: 300/300 documented hypo episodes detected (100% recall)"
-                ]
-            },
-            {
-                "title": "Out-of-Distribution (OOD) Guard & Self-Awareness",
-                "accent": (239, 68, 68),
-                "items": [
-                    "Mahalanobis Distance: Measures feature displacement from training covariance matrix",
-                    "Twin Confidence Metric: Normalized 0.0 to 1.0 confidence score returned on every query",
-                    "CGM Continuity Check: Detects missing sample streams and sensor detachments",
-                    "Model Self-Awareness Block: Version 6 API payload exposes empirical LOPO benchmarks directly"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/07_model_self_awareness.png",
+        "browser_url": "http://localhost:8501/#7-model-self-awareness-data-quality"
     },
 
-    # 08
+    # 08 - Live App Screen: Dashboard Overview & Patient Dropdown
     {
         "speaker": "A",
         "audio_text": """
@@ -445,36 +420,16 @@ The sidebar also shows the execution engine mode. In the default Live Inference 
 the dashboard loads the production LightGBM classifier and isotonic calibrator from the models folder,
 processes the patient's actual time-series data, and computes everything in real time.
 """,
-        "category": "CLINICAL DASHBOARD ARCHITECTURE",
-        "title": "Clinical Dashboard Architecture & Navigation",
-        "subtitle": "Built with Streamlit & Plotly: Real-Time Monitoring & Dual Execution Modes",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Clinical Dashboard: Live Patient Monitor UI",
+        "subtitle": "Streamlit App Running Live on http://localhost:8501 with 25-Patient Dropdown",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "Interactive Navigation & Sidebar Controls",
-                "accent": (147, 51, 234),
-                "items": [
-                    "Instant Launch: Simple 'streamlit run app.py' command with zero complex setup",
-                    "Multi-Patient Dropdown: Select between all 25 clinical subjects (HUPA0001P - HUPA0025P)",
-                    "Context Awareness: Displays real-time observation timestamp and Nocturnal status",
-                    "Patient Demographic Details: Age, gender, diabetes duration, insulin delivery mode"
-                ]
-            },
-            {
-                "title": "Dual Execution Engine Pipeline",
-                "accent": (6, 182, 212),
-                "items": [
-                    "Live Inference Mode (Primary): Loads production LightGBM & Isotonic calibrators",
-                    "Real-Time Feature Compute: Calculates 50-feature stack directly on selected patient data",
-                    "Demo Fallback Mode (Fail-Safe): Switches to verified snapshot if data/models are missing",
-                    "Status Banner: Green verified inference confirmation indicating active live calibrator"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/01_dashboard_overview.png",
+        "browser_url": "http://localhost:8501/ — Live Inference Mode Connected"
     },
 
-    # 09
+    # 09 - Live App Screen: Section 1 Current Patient State (HUPA0004P)
     {
         "speaker": "A",
         "audio_text": """
@@ -491,37 +446,16 @@ For example, for patient HUPA0004P at timestamp 2018-07-20, we see a glucose of 
 a slight downward velocity of minus 0.3 milligrams per deciliter per minute,
 a risk score of 0.5 out of 100, and an alert status of NORMAL. Completely safe.
 """,
-        "category": "DASHBOARD SECTION 1: LIVE MONITOR",
-        "title": "Section 1 — Current Patient State Panel",
-        "subtitle": "Five Real-Time Clinical Vitals & Calibrated Alert Tiering",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Section 1 — Current Patient State & Glycemic Vitals",
+        "subtitle": "Live Tracking HUPA0004P: Glucose 131 mg/dL, Velocity -0.3 mg/dL/min, Alert NORMAL",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "5 Live Clinical Metric Cards",
-                "accent": (37, 99, 235),
-                "items": [
-                    "Current Blood Glucose: Displayed in mg/dL with color-coded glycemic danger zones",
-                    "15-Minute Glucose Velocity: Rate of change in mg/dL/min (e.g. -0.3 mg/dL/min)",
-                    "Calibrated Hypo Risk Score: 0 to 100 probabilistic scale calibrated with isotonic regression",
-                    "Alert Machine Status: NORMAL (green), WATCH (yellow), WARNING (orange), CRITICAL (red)",
-                    "Glycemic Trend: Classified as Stable, Falling, Rapidly Falling, Rising, Rapidly Rising"
-                ]
-            },
-            {
-                "title": "Clinical Status Banner & Live Inspection",
-                "accent": (16, 185, 129),
-                "items": [
-                    "Live Tracking Badge: Green verified badge confirms active model computation",
-                    "Timestamp Precision: Evaluates specific clinical moment with zero lag",
-                    "Exemplar Patient HUPA0004P: Glucose 131 mg/dL, Velocity -0.3 mg/dL/min, Risk 0.5/100",
-                    "Clear Risk Stratification: Immediate situational clarity for healthcare providers"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/08_multi_patient_hupa0004p.png",
+        "browser_url": "http://localhost:8501/?patient=HUPA0004P"
     },
 
-    # 10
+    # 10 - Live App Screen: Section 2 & 3 Twin State & Multi-Horizon Risk
     {
         "speaker": "A",
         "audio_text": """
@@ -536,36 +470,16 @@ showing the patient's glucose trajectory over the last 3 hours,
 with color-coded regions marking the hypoglycemic zone below 70 and the near-hypo zone below 80.
 Historical hypo events from the patient's record are marked with red triangles.
 """,
-        "category": "DASHBOARD SECTIONS 2 & 3: PREDICTIONS & TRENDS",
-        "title": "Multi-Horizon Risk & Interactive Trend Chart",
-        "subtitle": "Forecast Extrapolations Across 30–120 Minutes & Dynamic Plotly Visualization",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Section 2 & 3 — Twin State & Multi-Horizon Risk",
+        "subtitle": "Active IOB (6.20 U), COB (3.0 g), Confidence: HIGH (1.000), 30–120m Projections",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "Section 2: Multi-Horizon Risk Estimates",
-                "accent": (6, 182, 212),
-                "items": [
-                    "30-Minute Horizon: Short-term risk projection reflecting immediate downward momentum",
-                    "60-Minute Horizon (Primary): Core model output calibrated via isotonic regression",
-                    "90-Minute & 120-Minute Horizons: Forward scaling curves for nocturnal sleep planning",
-                    "Transparent Clinical Honesty: Labeled as scaled projections, avoiding false precision"
-                ]
-            },
-            {
-                "title": "Section 3: Interactive 3-Hour Glucose Trend Chart",
-                "accent": (245, 158, 11),
-                "items": [
-                    "Dynamic Plotly Engine: Full zoom, hover, inspect, and pan capabilities",
-                    "Glycemic Bands: Red zone (< 70 mg/dL hypo), Yellow band (70-80 mg/dL near-hypo)",
-                    "Retrospective CGM Line: High-resolution 3-hour patient time series",
-                    "Documented Hypo Markers: Historical events marked with prominent red indicator triangles"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/02_twin_state_and_multihorizon.png",
+        "browser_url": "http://localhost:8501/#2-digital-twin-state-confidence"
     },
 
-    # 11
+    # 11 - Live App Screen: Section 4 What-If Simulator with Custom Sliders
     {
         "speaker": "A",
         "audio_text": """
@@ -581,37 +495,16 @@ You can adjust carbohydrate intake from 0 to 80 grams, select fast or complex ab
 add 0 to 8 units of bolus insulin, set an exercise intensity, and choose a horizon from 30 to 180 minutes.
 The dashboard recalculates and re-renders the counterfactual trajectory every time you move a slider.
 """,
-        "category": "DASHBOARD SECTION 4: WHAT-IF SIMULATOR",
-        "title": "Section 4 — What-If Metabolic Simulator",
-        "subtitle": "Counterfactual In-Silico Scenario Testing with Interactive Sliders",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Section 6 — What-If Metabolic Simulator in Action",
+        "subtitle": "Interactive Sliders: 15g Carbs, 0U Insulin, 120m Horizon → Dynamic Plotly Curve",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "Standardized Clinical Scenarios Panel",
-                "accent": (16, 185, 129),
-                "items": [
-                    "Baseline Projection: Natural unassisted metabolic trajectory under current velocity",
-                    "15g Fast Carbs (Rule of 15): Standard rapid glucose rescue scenario",
-                    "25g Bedtime Complex Snack: Sustained slow-release carbohydrate absorption profile",
-                    "Threshold Collision Test: Evaluates if trajectory avoids the 70 mg/dL hypo line"
-                ]
-            },
-            {
-                "title": "Custom Interactive Intervention Sliders",
-                "accent": (147, 51, 234),
-                "items": [
-                    "Carbohydrate Dosage Slider: 0 to 80 grams (Fast-acting vs Complex starch)",
-                    "Bolus Insulin Injection: 0.0 to 8.0 Units of rapid-acting subcutaneous insulin",
-                    "Exercise Intensity Selector: Sedentary, Mild, Moderate, High metabolic demand",
-                    "Simulation Horizon: 30 to 180 minutes forward ODE integration",
-                    "Instant Dynamic Rerendering: Real-time Bergman pharmacokinetic updates on slider change"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/06_whatif_custom_sliders.png",
+        "browser_url": "http://localhost:8501/#6-what-if-digital-twin-simulation"
     },
 
-    # 12
+    # 12 - Live App Screen: Section 5 Live SHAP Feature Attribution Table
     {
         "speaker": "A",
         "audio_text": """
@@ -632,36 +525,16 @@ It shows the twin_confidence score, the Mahalanobis distance from the training d
 a CGM continuity check, and an overall OOD flag.
 A high confidence score means the current observation is well within the model's training regime.
 """,
-        "category": "DASHBOARD SECTIONS 5, 6, 7: EXPLAINABILITY & TRUST",
-        "title": "SHAP Explainability, Patient Memory & OOD Panel",
-        "subtitle": "Transparent AI Decision Support Grounded in Clinical Interpretability",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Section 4 — Live SHAP TreeExplainer Attribution",
+        "subtitle": "Live Feature Importance Table Exposing Risk-Increasing & Risk-Mitigating Biomarkers",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "Section 5: Live SHAP Feature Attribution",
-                "accent": (37, 99, 235),
-                "items": [
-                    "Live TreeExplainer: Computes exact SHAP feature attributions on real-time queries",
-                    "Top Risk Drivers: Highlights the most influential features governing the prediction",
-                    "Directional Indicators: Green / Red bars showing whether features increase or mitigate risk",
-                    "Feature Values: Exposes active raw sensor readings alongside their attribution weights"
-                ]
-            },
-            {
-                "title": "Section 6 & 7: Patient Memory & OOD Confidence",
-                "accent": (245, 158, 11),
-                "items": [
-                    "Patient Memory: Top-3 historical episodes retrieved from patient's own retrospective past",
-                    "Historical Comparison: Shows glucose, alert level reached, and days since episode",
-                    "Mahalanobis Distance: Quantifies feature divergence from training population bounds",
-                    "Twin Confidence Score: Transparent 0.0 to 1.0 reliability metric alerting clinician"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/03_shap_explainability.png",
+        "browser_url": "http://localhost:8501/#4-why-is-the-risk-this-level-explainability"
     },
 
-    # 13
+    # 13 - Live App Screen: Section 5 Continuous Patient Memory Precedents
     {
         "speaker": "A",
         "audio_text": """
@@ -678,36 +551,16 @@ Multi-patient navigation works seamlessly. Simply change the patient ID in the s
 and the entire dashboard — all panels, all charts, all SHAP explanations — refreshes automatically
 for the newly selected patient, each with their own personalised twin state.
 """,
-        "category": "DASHBOARD RESILIENCE & MULTI-PATIENT UX",
-        "title": "Zero-Crash Demo Fallback Mode & Seamless UX",
-        "subtitle": "Guaranteed Reliability Across Any Deployment Environment",
+        "category": "LIVE APPLICATION DEMO  •  HTTP://LOCALHOST:8501",
+        "title": "Section 5 — Historical Precedent Matching (Patient Memory)",
+        "subtitle": "Top-3 Matched Historical Moments (61.4%, 60.8%, 59.0% Similarity) with Temporal Guards",
         "badge_speaker": "Aishni Rathore  |  Dashboard Design & Integration Lead",
         "speaker_color": (147, 51, 234),
-        "cards": [
-            {
-                "title": "Zero-Crash Demo Fallback Architecture",
-                "accent": (16, 185, 129),
-                "items": [
-                    "Automatic Missing Artifact Detection: Gracefully intercepts missing model/dataset files",
-                    "Verified Static Payload: Seamlessly falls back to data/dashboard_demo_payload.json",
-                    "Diagnostic Inspection Banner: Clearly indicates fallback status and missing dependencies",
-                    "Zero Blank Screens: Guaranteeing the UI functions perfectly for hackathon evaluators"
-                ]
-            },
-            {
-                "title": "Instant Multi-Patient Dynamic Navigation",
-                "accent": (147, 51, 234),
-                "items": [
-                    "Sidebar Dropdown: Instant selection across all 25 clinical subjects",
-                    "Full Reactive Rerender: Updates all 7 sections, charts, metrics, and SHAP weights",
-                    "Personalized Set-Points: Reflects each patient's unique expanding baseline mean",
-                    "Complete Clinical Isolation: Zero cross-talk between individual patient histories"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/04_patient_memory_precedents.png",
+        "browser_url": "http://localhost:8501/#5-historical-precedent-matching"
     },
 
-    # 14
+    # 14 - Benchmark Summary
     {
         "speaker": "R",
         "audio_text": """
@@ -757,7 +610,7 @@ Mean advance lead time: 47.4 minutes. Median lead time: 48.8 minutes.
         ]
     },
 
-    # 15
+    # 15 - Live Terminal & Test Suite Execution
     {
         "speaker": "R",
         "audio_text": """
@@ -776,39 +629,16 @@ and the demo fallback payload is structurally intact.
 All files in the repository are publicly accessible at github dot com slash Ronak1167 slash glucotwin.
 The CI badge confirms a passing status on the main branch.
 """,
-        "category": "SOFTWARE ENGINEERING & CI/CD",
-        "title": "Comprehensive Test Suite & CI/CD Verification",
-        "subtitle": "38 Automated Tests Passing Across Python 3.10 & 3.11 Environments",
+        "category": "LIVE CODE EXECUTION & VERIFICATION",
+        "title": "Automated Test Suite & Live Execution Run",
+        "subtitle": "Streamlit Engine Initialization & 38 PyTest Tests Passing in 10.40s",
         "badge_speaker": "Ronak Jain  |  ML Architecture & Lead Engineer",
         "speaker_color": (37, 99, 235),
-        "cards": [
-            {
-                "title": "34 Machine Learning Engine Unit Tests",
-                "accent": (37, 99, 235),
-                "items": [
-                    "Data Pipeline: Ingestion, 5-min interpolation caps, closed-left rolling windows",
-                    "Feature Engineering: 50 features, velocity, acceleration, IOB/COB, circadian vectors",
-                    "Model Training: LightGBM classification, LOPO validation splits, fallback gates",
-                    "Calibration & Trust: Isotonic regression, ECE computation, Brier score reductions",
-                    "Digital Twin Core: FSM hysteresis, OOD Mahalanobis distance, ODE trajectory accuracy",
-                    "Memory & Contracts: Temporal backward guard (< T), TwinState v6 JSON serialization"
-                ]
-            },
-            {
-                "title": "4 Dashboard Integration Tests & GitHub Actions CI",
-                "accent": (16, 185, 129),
-                "items": [
-                    "test_dashboard_production_artifacts: Confirms model files load in production",
-                    "test_dashboard_live_engine_snapshot: Validates live patient twin state generation",
-                    "test_dashboard_simulator_interventions: Confirms What-If ODE response to carbs/insulin",
-                    "test_dashboard_demo_fallback_payload: Validates fallback payload integrity",
-                    "GitHub Actions CI: Matrix build passing on both Python 3.10 and Python 3.11"
-                ]
-            }
-        ]
+        "screenshot": "docs/submission/screenshots/09_terminal_test_run.png",
+        "browser_url": "Terminal: ~/glucotwin (python -m pytest tests/)"
     },
 
-    # 16
+    # 16 - Disclaimers
     {
         "speaker": "A",
         "audio_text": """
@@ -856,7 +686,7 @@ Please never use GlucoTwin outputs to replace clinical judgment, standard CGM mo
         ]
     },
 
-    # 17
+    # 17 - Innovations Summary
     {
         "speaker": "R",
         "audio_text": """
@@ -922,7 +752,7 @@ are all available at github dot com slash Ronak1167 slash glucotwin.
         ]
     },
 
-    # 18
+    # 18 - Closing Aishni
     {
         "speaker": "A",
         "audio_text": """
@@ -958,7 +788,7 @@ Thank you so much for your time. I am Aishni Rathore.
         ]
     },
 
-    # 19
+    # 19 - Closing Ronak
     {
         "speaker": "R",
         "audio_text": """
@@ -1001,16 +831,9 @@ Thank you, Happiest Health and the CRP Digital Twin Challenge 2026 committee.
 # ──────────────────────────────────────────────────────────
 # AUDIO GENERATION (win32com SAPI5 direct COM)
 # ──────────────────────────────────────────────────────────
-import win32com.client
-
 def generate_audio_segments():
-    print("[1/4] Generating speech audio segments via SAPI5 COM...")
-    speaker = win32com.client.Dispatch("SAPI.SpVoice")
-    speaker.Rate = 0  # Natural conversational pacing
-
-    voices = speaker.GetVoices()
-    david = [v for v in voices if "david" in v.GetDescription().lower()][0]
-    zira = [v for v in voices if "zira" in v.GetDescription().lower()][0]
+    print("[1/4] Checking and generating speech audio segments...")
+    speaker = None
 
     audio_paths = []
     durations = []
@@ -1019,33 +842,42 @@ def generate_audio_segments():
         spk = seg["speaker"]
         wav_path = AUDIO_TMP / f"seg_{i:03d}_{spk}.wav"
 
-        speaker.Voice = david if spk == "R" else zira
-        text = seg["audio_text"].strip()
+        # Reuse existing audio if intact
+        if not wav_path.exists() or wav_path.stat().st_size < 1000:
+            if speaker is None:
+                speaker = win32com.client.Dispatch("SAPI.SpVoice")
+                speaker.Rate = 0
+                voices = speaker.GetVoices()
+                david = [v for v in voices if "david" in v.GetDescription().lower()][0]
+                zira = [v for v in voices if "zira" in v.GetDescription().lower()][0]
 
-        stream = win32com.client.Dispatch("SAPI.SpFileStream")
-        stream.Open(str(wav_path), 3, False)  # 3 = SSFMCreateForWrite
-        speaker.AudioOutputStream = stream
-        speaker.Speak(text)
-        stream.Close()
+            speaker.Voice = david if spk == "R" else zira
+            text = seg["audio_text"].strip()
 
-        # Measure duration with wave
+            stream = win32com.client.Dispatch("SAPI.SpFileStream")
+            stream.Open(str(wav_path), 3, False)
+            speaker.AudioOutputStream = stream
+            speaker.Speak(text)
+            stream.Close()
+            print(f"  [synthesized] Segment {i:02d} ({spk}) -> {wav_path.name}")
+        else:
+            print(f"  [reused]      Segment {i:02d} ({spk}) -> {wav_path.name}")
+
         with wave.open(str(wav_path), "rb") as w:
             dur = w.getnframes() / float(w.getframerate())
 
         audio_paths.append(wav_path)
         durations.append(dur)
-        print(f"  Segment {i:02d} ({spk}): {dur:.1f}s -> {wav_path.name}")
 
     print(f"Total audio duration: {sum(durations):.1f}s (~{sum(durations)/60:.1f} min)")
     return audio_paths, durations
 
 # ──────────────────────────────────────────────────────────
-# SLIDE IMAGE GENERATION (Pillow high-resolution dark UI)
+# SLIDE / SCREENSHOT IMAGE GENERATION (Pillow)
 # ──────────────────────────────────────────────────────────
 def render_slide_image(idx, seg):
     title_font, heading_font, body_font, badge_font, small_font, metric_font = get_fonts()
 
-    # Background: modern deep navy
     img = Image.new("RGB", (W_VID, H_VID), (10, 15, 29))
     draw = ImageDraw.Draw(img)
 
@@ -1056,95 +888,122 @@ def render_slide_image(idx, seg):
     draw.text((50, 20), seg["category"].upper(), fill=(148, 163, 184), font=badge_font)
 
     # Speaker badge (top right)
-    spk_box = [W_VID - 420, 16, W_VID - 50, 44]
+    spk_box = [W_VID - 430, 16, W_VID - 50, 44]
     draw.rounded_rectangle(spk_box, radius=6, fill=(30, 41, 59), outline=seg["speaker_color"], width=1)
-    draw.text((W_VID - 235, 30), seg["badge_speaker"], fill=(241, 245, 249), anchor="mm", font=badge_font)
+    draw.text((W_VID - 240, 30), seg["badge_speaker"], fill=(241, 245, 249), anchor="mm", font=badge_font)
 
     # Main Title
     draw.text((50, 46), seg["title"], fill=(255, 255, 255), font=title_font)
     # Subtitle
     draw.text((50, 88), seg["subtitle"], fill=(147, 197, 253), font=body_font)
 
-    # Card layout (2 columns)
-    cards = seg["cards"]
-    card_y = 125
-    card_h = 530
+    screenshot_rel = seg.get("screenshot")
+    if screenshot_rel and (ROOT / screenshot_rel).exists():
+        # RENDER REAL APPLICATION SCREENSHOT / LIVE DEMO FRAME
+        shot_path = ROOT / screenshot_rel
+        shot_img = Image.open(str(shot_path))
 
-    if len(cards) == 2:
-        col_w = 575
-        col_gap = 30
-        for c_idx, card in enumerate(cards):
-            c_x = 50 + c_idx * (col_w + col_gap)
-            # Card background
-            draw.rounded_rectangle([c_x, card_y, c_x + col_w, card_y + card_h], radius=10,
-                                   fill=(17, 24, 39), outline=(51, 65, 85), width=1)
-            # Card header line
-            draw.rounded_rectangle([c_x, card_y, c_x + col_w, card_y + 46], radius=10, fill=(30, 41, 59))
-            draw.rectangle([c_x, card_y + 20, c_x + col_w, card_y + 46], fill=(30, 41, 59))
-            draw.rectangle([c_x, card_y + 44, c_x + col_w, card_y + 46], fill=card["accent"])
+        frame_x, frame_y, frame_w, frame_h = 50, 125, 1180, 530
 
-            # Card title
-            draw.text((c_x + 18, card_y + 23), card["title"], fill=(255, 255, 255), anchor="lm", font=heading_font)
+        # Outer browser window
+        draw.rounded_rectangle([frame_x, frame_y, frame_x + frame_w, frame_y + frame_h], radius=8,
+                               fill=(17, 24, 39), outline=(59, 130, 246), width=2)
+        # Window title bar
+        draw.rounded_rectangle([frame_x, frame_y, frame_x + frame_w, frame_y + 36], radius=8, fill=(30, 41, 59))
+        draw.rectangle([frame_x, frame_y + 18, frame_x + frame_w, frame_y + 36], fill=(30, 41, 59))
 
-            # Bullet items
-            item_y = card_y + 60
-            for item in card["items"]:
-                # bullet bullet dot
-                draw.ellipse([c_x + 18, item_y + 5, c_x + 24, item_y + 11], fill=card["accent"])
-                # text wrap
-                words = item.split()
-                line = ""
-                for w in words:
-                    test_line = f"{line} {w}".strip()
-                    bbox = draw.textbbox((0, 0), test_line, font=body_font)
-                    if (bbox[2] - bbox[0]) > (col_w - 55):
+        # Mac/Browser window dots
+        draw.ellipse([frame_x + 14, frame_y + 13, frame_x + 24, frame_y + 23], fill=(239, 68, 68))
+        draw.ellipse([frame_x + 30, frame_y + 13, frame_x + 40, frame_y + 23], fill=(245, 158, 11))
+        draw.ellipse([frame_x + 46, frame_y + 13, frame_x + 56, frame_y + 23], fill=(34, 197, 94))
+
+        # Address bar
+        url_text = seg.get("browser_url", "http://localhost:8501 — GlucoTwin Clinical Monitor")
+        draw.rounded_rectangle([frame_x + 75, frame_y + 6, frame_x + 850, frame_y + 30], radius=4, fill=(15, 23, 42), outline=(51, 65, 85))
+        draw.text((frame_x + 90, frame_y + 18), f"🔒 {url_text}", fill=(148, 163, 184), anchor="lm", font=small_font)
+
+        # Live Demo Badge
+        draw.rounded_rectangle([frame_x + frame_w - 240, frame_y + 6, frame_x + frame_w - 15, frame_y + 30], radius=4, fill=(6, 78, 59), outline=(16, 185, 129))
+        draw.text((frame_x + frame_w - 128, frame_y + 18), "● LIVE RUNNING DEMO", fill=(52, 211, 153), anchor="mm", font=badge_font)
+
+        # Paste scaled screenshot into view area
+        shot_w, shot_h = frame_w - 4, frame_h - 40
+        shot_resized = shot_img.resize((shot_w, shot_h), Image.Resampling.LANCZOS)
+        img.paste(shot_resized, (frame_x + 2, frame_y + 38))
+
+    else:
+        # RENDER STRUCTURED 2-COLUMN OR 4-GRID PRESENTATION CARDS
+        cards = seg.get("cards", [])
+        card_y = 125
+        card_h = 530
+
+        if len(cards) == 2:
+            col_w = 575
+            col_gap = 30
+            for c_idx, card in enumerate(cards):
+                c_x = 50 + c_idx * (col_w + col_gap)
+                draw.rounded_rectangle([c_x, card_y, c_x + col_w, card_y + card_h], radius=10,
+                                       fill=(17, 24, 39), outline=(51, 65, 85), width=1)
+                draw.rounded_rectangle([c_x, card_y, c_x + col_w, card_y + 46], radius=10, fill=(30, 41, 59))
+                draw.rectangle([c_x, card_y + 20, c_x + col_w, card_y + 46], fill=(30, 41, 59))
+                draw.rectangle([c_x, card_y + 44, c_x + col_w, card_y + 46], fill=card["accent"])
+                draw.text((c_x + 18, card_y + 23), card["title"], fill=(255, 255, 255), anchor="lm", font=heading_font)
+
+                item_y = card_y + 60
+                for item in card["items"]:
+                    draw.ellipse([c_x + 18, item_y + 5, c_x + 24, item_y + 11], fill=card["accent"])
+                    words = item.split()
+                    line = ""
+                    for w in words:
+                        test_line = f"{line} {w}".strip()
+                        bbox = draw.textbbox((0, 0), test_line, font=body_font)
+                        if (bbox[2] - bbox[0]) > (col_w - 55):
+                            draw.text((c_x + 32, item_y), line, fill=(226, 232, 240), font=body_font)
+                            item_y += 24
+                            line = w
+                        else:
+                            line = test_line
+                    if line:
                         draw.text((c_x + 32, item_y), line, fill=(226, 232, 240), font=body_font)
-                        item_y += 24
-                        line = w
-                    else:
-                        line = test_line
-                if line:
-                    draw.text((c_x + 32, item_y), line, fill=(226, 232, 240), font=body_font)
-                    item_y += 30
+                        item_y += 30
 
-    elif len(cards) == 4:
-        # 4 cards (2x2 grid)
-        col_w = 575
-        col_h = 250
-        gap_x = 30
-        gap_y = 20
-        coords = [
-            (50, card_y),
-            (50 + col_w + gap_x, card_y),
-            (50, card_y + col_h + gap_y),
-            (50 + col_w + gap_x, card_y + col_h + gap_y),
-        ]
-        for c_idx, card in enumerate(cards):
-            c_x, c_y = coords[c_idx]
-            draw.rounded_rectangle([c_x, c_y, c_x + col_w, c_y + col_h], radius=8,
-                                   fill=(17, 24, 39), outline=(51, 65, 85), width=1)
-            draw.rounded_rectangle([c_x, c_y, c_x + col_w, c_y + 38], radius=8, fill=(30, 41, 59))
-            draw.rectangle([c_x, c_y + 18, c_x + col_w, c_y + 38], fill=(30, 41, 59))
-            draw.rectangle([c_x, c_y + 36, c_x + col_w, c_y + 38], fill=card["accent"])
-            draw.text((c_x + 14, c_y + 19), card["title"], fill=(255, 255, 255), anchor="lm", font=heading_font)
+        elif len(cards) == 4:
+            col_w = 575
+            col_h = 250
+            gap_x = 30
+            gap_y = 20
+            coords = [
+                (50, card_y),
+                (50 + col_w + gap_x, card_y),
+                (50, card_y + col_h + gap_y),
+                (50 + col_w + gap_x, card_y + col_h + gap_y),
+            ]
+            for c_idx, card in enumerate(cards):
+                c_x, c_y = coords[c_idx]
+                draw.rounded_rectangle([c_x, c_y, c_x + col_w, c_y + col_h], radius=8,
+                                       fill=(17, 24, 39), outline=(51, 65, 85), width=1)
+                draw.rounded_rectangle([c_x, c_y, c_x + col_w, c_y + 38], radius=8, fill=(30, 41, 59))
+                draw.rectangle([c_x, c_y + 18, c_x + col_w, c_y + 38], fill=(30, 41, 59))
+                draw.rectangle([c_x, c_y + 36, c_x + col_w, c_y + 38], fill=card["accent"])
+                draw.text((c_x + 14, c_y + 19), card["title"], fill=(255, 255, 255), anchor="lm", font=heading_font)
 
-            item_y = c_y + 50
-            for item in card["items"]:
-                draw.ellipse([c_x + 14, item_y + 5, c_x + 20, item_y + 11], fill=card["accent"])
-                words = item.split()
-                line = ""
-                for w in words:
-                    test_line = f"{line} {w}".strip()
-                    bbox = draw.textbbox((0, 0), test_line, font=body_font)
-                    if (bbox[2] - bbox[0]) > (col_w - 45):
+                item_y = c_y + 50
+                for item in card["items"]:
+                    draw.ellipse([c_x + 14, item_y + 5, c_x + 20, item_y + 11], fill=card["accent"])
+                    words = item.split()
+                    line = ""
+                    for w in words:
+                        test_line = f"{line} {w}".strip()
+                        bbox = draw.textbbox((0, 0), test_line, font=body_font)
+                        if (bbox[2] - bbox[0]) > (col_w - 45):
+                            draw.text((c_x + 26, item_y), line, fill=(226, 232, 240), font=body_font)
+                            item_y += 22
+                            line = w
+                        else:
+                            line = test_line
+                    if line:
                         draw.text((c_x + 26, item_y), line, fill=(226, 232, 240), font=body_font)
-                        item_y += 22
-                        line = w
-                    else:
-                        line = test_line
-                if line:
-                    draw.text((c_x + 26, item_y), line, fill=(226, 232, 240), font=body_font)
-                    item_y += 28
+                        item_y += 28
 
     # Bottom footer bar
     draw.rectangle([0, H_VID - 42, W_VID, H_VID], fill=(15, 23, 42))
@@ -1152,7 +1011,7 @@ def render_slide_image(idx, seg):
 
     footer_left = "GlucoTwin: Predictive Metabolic Digital Twin for T1D  |  CRP Digital Twin Challenge 2026"
     footer_mid = "Ronak Jain & Aishni Rathore (JIIT Noida)"
-    footer_right = f"Slide {idx+1:02d} / {len(SEGMENTS):02d}"
+    footer_right = f"Part {idx+1:02d} / {len(SEGMENTS):02d}"
 
     draw.text((50, H_VID - 21), footer_left, fill=(148, 163, 184), anchor="lm", font=small_font)
     draw.text((W_VID // 2 + 100, H_VID - 21), footer_mid, fill=(203, 213, 225), anchor="mm", font=small_font)
@@ -1167,10 +1026,10 @@ def render_slide_image(idx, seg):
 # ──────────────────────────────────────────────────────────
 def build_final_video(audio_paths, durations):
     ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
-    print(f"[2/4] Rendering {len(SEGMENTS)} slide visual images...")
+    print(f"[2/4] Rendering {len(SEGMENTS)} visual video frames (with live demo screen embeds)...")
     slide_paths = [render_slide_image(i, seg) for i, seg in enumerate(SEGMENTS)]
 
-    print(f"[3/4] Encoding {len(SEGMENTS)} individual video clips...")
+    print(f"[3/4] Encoding {len(SEGMENTS)} video clips with A/V sync...")
     clip_paths = []
     for i in range(len(SEGMENTS)):
         slide = slide_paths[i]
@@ -1198,13 +1057,13 @@ def build_final_video(audio_paths, durations):
             print(f"Error encoding clip {i}: {res.stderr.decode('utf-8', errors='ignore')}")
             sys.exit(1)
         clip_paths.append(clip_out)
-        print(f"  Encoded clip {i:02d} / {len(SEGMENTS):02d} ({durations[i]:.1f}s)")
+        has_screen = " [LIVE SCREEN]" if SEGMENTS[i].get("screenshot") else ""
+        print(f"  Encoded clip {i:02d} / {len(SEGMENTS):02d} ({durations[i]:.1f}s){has_screen}")
 
     print("[4/4] Concatenating clips into final submission video...")
     concat_txt = OUT_DIR / "concat_clips.txt"
     with open(concat_txt, "w") as f:
         for c in clip_paths:
-            # Format path for ffmpeg concat demuxer
             safe_path = str(c).replace("\\", "/")
             f.write(f"file '{safe_path}'\n")
 
@@ -1224,7 +1083,7 @@ def build_final_video(audio_paths, durations):
 
     vid_size_mb = os.path.getsize(str(final_video)) / (1024 * 1024)
     print(f"\n=======================================================")
-    print(f"[SUCCESS] Final Video Ready!")
+    print(f"[SUCCESS] Final Demonstration Video Ready!")
     print(f"Path: {final_video}")
     print(f"File Size: {vid_size_mb:.2f} MB")
     print(f"=======================================================")
